@@ -37,6 +37,10 @@
         <div class="header__nav-dropdown">
           <button class="header__nav-dropdown-toggle">Ещё <i class="fas fa-chevron-down"></i></button>
           <div class="header__nav-dropdown-menu">
+            <a href="calendar.html" class="header__nav-link">События</a>
+            <a href="guides.html" class="header__nav-link">Памятки</a>
+            <a href="partners.html" class="header__nav-link">Партнёры</a>
+            <a href="polls.html" class="header__nav-link">Голосования</a>
             <a href="documents.html" class="header__nav-link">Документы</a>
             <a href="repairs.html" class="header__nav-link">Ремонты</a>
             <a href="gallery.html" class="header__nav-link">Галерея</a>
@@ -161,6 +165,17 @@
     </div>
   </section>
 
+  <!-- ===== Events ===== -->
+  <section class="section" id="events">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Ближайшие события</h2>
+        <a href="calendar.html" class="section-all-link">Календарь →</a>
+      </div>
+      <div id="calendar-widget"><div class="loading-placeholder"><i class="fas fa-spinner fa-pulse"></i> Загрузка событий...</div></div>
+    </div>
+  </section>
+
   <!-- ===== Contacts ===== -->
   <section class="section contacts" id="contacts">
     <div class="container">
@@ -176,12 +191,24 @@
 
   <!-- ===== Footer ===== -->
   <footer class="footer">
-    <div class="container footer__inner">
-      <div>&copy; <span id="footer-year">2026</span> ЖКС Загребенки. Все права защищены.</div>
-      <div class="footer__links">
-        <a href="privacy.html">Политика конфиденциальности</a>
-        <a href="contacts.html">Контакты</a>
-        <a href="contacts.html#requisites">Реквизиты</a>
+    <div class="container" style="display:flex;flex-direction:column;gap:24px;">
+      <div style="max-width:400px;">
+        <h4 style="font-family:var(--font-heading);font-weight:600;font-size:0.82rem;color:rgba(255,255,255,0.8);margin-bottom:12px;">Подписаться на новости</h4>
+        <form id="newsletterForm" class="newsletter-form">
+          <div style="flex:1;">
+            <input type="email" id="newsletterEmail" placeholder="Ваш email" required style="width:100%;padding:10px 14px;border:1px solid rgba(255,255,255,0.2);border-radius:4px;background:rgba(255,255,255,0.08);color:#fff;font-family:var(--font-body);font-size:0.85rem;outline:none;">
+          </div>
+          <button type="submit" class="btn btn--primary" style="padding:10px 16px;font-size:0.78rem;">Подписаться</button>
+        </form>
+        <div id="newsletterMsg" style="font-size:0.78rem;margin-top:8px;"></div>
+      </div>
+      <div class="footer__inner">
+        <div>&copy; <span id="footer-year">2026</span> ЖКС Загребенки. Все права защищены.</div>
+        <div class="footer__links">
+          <a href="privacy.html">Политика конфиденциальности</a>
+          <a href="contacts.html">Контакты</a>
+          <a href="contacts.html#requisites">Реквизиты</a>
+        </div>
       </div>
     </div>
   </footer>
@@ -196,5 +223,17 @@
 
   <script src="common.js"></script>
   <script src="script.js"></script>
+  <script>
+    // Calendar widget on homepage
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const data = await loadData();
+        const cw = document.getElementById('calendar-widget');
+        if (cw && data.events) {
+          renderCalendar('calendar-widget', data.events, 0);
+        }
+      } catch(e) {}
+    });
+  </script>
 </body>
 </html>

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Документы — ЖКС Загребенки</title>
-  <meta name="description" content="Официальные документы ЖКС Загребенки: устав, отчёты, планы ремонтов, договоры управления.">
+  <title>Голосования — ЖКС Загребенки</title>
+  <meta name="description" content="Опросы и голосования жителей ЖКС Загребенки">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
@@ -34,7 +34,7 @@
               <a href="guides.html" class="header__nav-link">Памятки</a>
               <a href="partners.html" class="header__nav-link">Партнёры</a>
               <a href="polls.html" class="header__nav-link">Голосования</a>
-              <a href="documents.html" class="header__nav-link header__nav-link--active">Документы</a>
+              <a href="documents.html" class="header__nav-link">Документы</a>
               <a href="repairs.html" class="header__nav-link">Ремонты</a>
               <a href="gallery.html" class="header__nav-link">Галерея</a>
               <a href="faq.html" class="header__nav-link">Вопросы-ответы</a>
@@ -65,15 +65,15 @@
 
   <div class="page-header">
     <div class="container">
-      <h1 class="page-header__title">Документы</h1>
-      <p class="page-header__subtitle">Официальные документы и отчёты ЖКС Загребенки</p>
+      <h1 class="page-header__title">Голосования</h1>
+      <p class="page-header__subtitle">Опросы жителей</p>
     </div>
   </div>
 
   <section class="page-section">
     <div class="container">
-      <div class="documents__list" id="documents-list">
-        <div class="loading-placeholder"><i class="fas fa-spinner fa-pulse"></i> Загрузка документов...</div>
+      <div id="polls-list">
+        <div class="loading-placeholder"><i class="fas fa-spinner fa-pulse"></i> Загрузка опросов...</div>
       </div>
     </div>
   </section>
@@ -96,28 +96,36 @@
         const data = await loadData();
         const em = document.getElementById('emergency-phone');
         if (em) em.textContent = data.emergencyPhone;
-
-        const docsList = document.getElementById('documents-list');
-        if (docsList && data.documents) {
-          docsList.innerHTML = '';
-          for (const doc of data.documents) {
-            const el = document.createElement('div');
-            el.className = 'document-item';
-            el.innerHTML = `
-              <div class="document-item__icon"><i class="fas fa-file-pdf"></i></div>
-              <div class="document-item__info">
-                <div class="document-item__name">${doc.name}</div>
-                <button class="document-item__link" data-file="${doc.file}"><i class="fas fa-download"></i> Скачать</button>
-              </div>
-            `;
-            el.querySelector('.document-item__link').addEventListener('click', function() {
-              alert('Файл «' + doc.file + '» будет доступен для скачивания после загрузки на сервер.');
-            });
-            docsList.appendChild(el);
+        const list = document.getElementById('polls-list');
+        list.innerHTML = '';
+        for (const poll of data.polls) {
+          const card = document.createElement('div');
+          card.className = 'poll-card' + (poll.active ? '' : ' poll-card--closed');
+          const total = poll.votes.reduce(function(a, b) { return a + b; }, 0);
+          var optionsHtml = '';
+          for (var i = 0; i < poll.options.length; i++) {
+            optionsHtml += '<div class="poll-card__option"><input type="radio" name="poll_' + poll.id + '" id="poll_' + poll.id + '_' + i + '" value="' + i + '"><label for="poll_' + poll.id + '_' + i + '">' + poll.options[i] + '</label></div>';
+          }
+          card.innerHTML = '<div class="poll-card__question">' + poll.question + '</div><form id="pollForm' + poll.id + '">' + optionsHtml + (poll.active ? '<button type="submit" class="btn btn--primary poll-card__btn" style="padding:8px 16px;font-size:0.8rem;">Голосовать</button>' : '') + '</form><div class="poll-card__results" id="pollResults' + poll.id + '"></div><div class="poll-card__date">' + formatDate(poll.date) + '</div>';
+          list.appendChild(card);
+          var form = card.querySelector('#pollForm' + poll.id);
+          if (form) {
+            form.addEventListener('submit', function(pollId) {
+              return function(e) {
+                e.preventDefault();
+                var selected = e.target.querySelector('input[type="radio"]:checked');
+                if (!selected) { alert('Выберите вариант'); return; }
+                votePoll(pollId, parseInt(selected.value));
+              };
+            }(poll.id));
+          }
+          var votedPolls = (function() { try { return JSON.parse(localStorage.getItem('zhks_voted')) || []; } catch(e) { return []; } })();
+          if (votedPolls.indexOf(poll.id) >= 0 || !poll.active) {
+            renderPollResults(poll.id);
           }
         }
-      } catch (e) {
-        document.querySelector('.loading-placeholder').innerHTML = '<div class="error-placeholder"><i class="fas fa-exclamation-triangle"></i> Данные временно недоступны.</div>';
+      } catch(e) {
+        document.getElementById('polls-list').innerHTML = '<div class="error-placeholder"><i class="fas fa-exclamation-triangle"></i> Данные временно недоступны.</div>';
       }
     });
   </script>

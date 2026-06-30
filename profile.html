@@ -29,16 +29,20 @@
         <a href="outages.html" class="header__nav-link">Отключения</a>
         <div class="header__nav-dropdown">
           <button class="header__nav-dropdown-toggle">Ещё <i class="fas fa-chevron-down"></i></button>
-          <div class="header__nav-dropdown-menu">
-            <a href="documents.html" class="header__nav-link">Документы</a>
-            <a href="repairs.html" class="header__nav-link">Ремонты</a>
-            <a href="gallery.html" class="header__nav-link">Галерея</a>
-            <a href="faq.html" class="header__nav-link">Вопросы-ответы</a>
-            <a href="vacancies.html" class="header__nav-link">Вакансии</a>
-            <a href="feedback.html" class="header__nav-link">Обратная связь</a>
-            <a href="house-registry.html" class="header__nav-link">Реестр домов</a>
-            <a href="contacts.html" class="header__nav-link">Контакты</a>
-          </div>
+            <div class="header__nav-dropdown-menu">
+              <a href="calendar.html" class="header__nav-link">События</a>
+              <a href="guides.html" class="header__nav-link">Памятки</a>
+              <a href="partners.html" class="header__nav-link">Партнёры</a>
+              <a href="polls.html" class="header__nav-link">Голосования</a>
+              <a href="documents.html" class="header__nav-link">Документы</a>
+              <a href="repairs.html" class="header__nav-link">Ремонты</a>
+              <a href="gallery.html" class="header__nav-link">Галерея</a>
+              <a href="faq.html" class="header__nav-link">Вопросы-ответы</a>
+              <a href="vacancies.html" class="header__nav-link">Вакансии</a>
+              <a href="feedback.html" class="header__nav-link">Обратная связь</a>
+              <a href="house-registry.html" class="header__nav-link">Реестр домов</a>
+              <a href="contacts.html" class="header__nav-link">Контакты</a>
+            </div>
         </div>
       </nav>
       <div class="header__right">
@@ -248,7 +252,7 @@
               </div>
               <div class="profile-balance__actions">
                 <button class="btn btn--primary" onclick="showPaymentModal()"><i class="fas fa-credit-card"></i> Оплатить</button>
-                <button class="btn btn--ghost" onclick="alert('Квитанция будет доступна для скачивания')"><i class="fas fa-download"></i> Квитанция</button>
+                <button class="btn btn--ghost" onclick="downloadReceipt({id:'receipt_'+Date.now(), period: (payments&&payments.length>0?payments[0].period:'—'), total: Math.abs(balance), paid: Math.abs(balance), maintenance: 785.20, repair: 253.80, water: 412.50, heating: 0, electricity: 290.40, date: new Date().toLocaleDateString('ru-RU')})"><i class="fas fa-download"></i> Квитанция</button>
               </div>
             </div>
 
@@ -401,6 +405,10 @@
               <p>Спасибо! Ваши показания приняты.</p>
             </div>
           </div>
+          <div style="margin-top:24px;">
+            <h4 style="font-family:var(--font-heading);font-weight:600;font-size:0.9rem;color:var(--color-primary);margin-bottom:12px;">Расход за последние месяцы</h4>
+            <div id="meterChart"></div>
+          </div>
           <div>
             <h4 style="font-family:var(--font-heading);font-weight:600;font-size:0.9rem;color:var(--color-primary);margin-bottom:16px;">Информация о счётчиках</h4>
             <div class="profile-meters__info">
@@ -442,6 +450,46 @@
           mSuccess.classList.add('active');
         });
       }
+      // Draw meter consumption chart
+      renderMeterChart(profile);
+    }
+
+    function renderMeterChart(profile) {
+      var chartEl = document.getElementById('meterChart');
+      if (!chartEl) return;
+      var history = profile.meterHistory || [];
+      // Group by date
+      var groups = {};
+      for (var i = 0; i < history.length; i++) {
+        var h = history[i];
+        if (!groups[h.date]) groups[h.date] = {};
+        groups[h.date][h.type] = h.value;
+      }
+      var dates = Object.keys(groups).sort();
+      if (dates.length < 2) { chartEl.innerHTML = '<p style="font-size:0.78rem;color:var(--color-text-muted);">Недостаточно данных для графика</p>'; return; }
+      var types = ['coldWater', 'hotWater', 'electricity'];
+      var labels = ['ХВС', 'ГВС', 'Эл-во'];
+      var colors = ['#2B7BEE', '#D94A4A', '#F59E0B'];
+      var maxVal = 0;
+      for (var j = 0; j < dates.length; j++) {
+        for (var t = 0; t < types.length; t++) {
+          var v = groups[dates[j]][types[t]] || 0;
+          if (v > maxVal) maxVal = v;
+        }
+      }
+      var html = '<div style="display:grid;gap:16px;">';
+      for (var t2 = 0; t2 < types.length; t2++) {
+        html += '<div><div style="font-size:0.72rem;color:var(--color-text-muted);margin-bottom:4px;">' + labels[t2] + '</div><div style="display:flex;gap:4px;align-items:flex-end;height:60px;">';
+        for (var d = 0; d < dates.length; d++) {
+          var val = groups[dates[d]][types[t2]] || 0;
+          var pct = maxVal > 0 ? Math.max(4, (val / maxVal) * 100) : 4;
+          var shortDate = dates[d].split('.').slice(1).join('.');
+          html += '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;"><div style="width:100%;background:' + colors[t2] + ';border-radius:2px 2px 0 0;height:' + pct + 'px;min-height:4px;transition:height 0.3s;" title="' + val + '"></div><span style="font-size:0.6rem;color:var(--color-text-muted);">' + dates[d] + '</span></div>';
+        }
+        html += '</div></div>';
+      }
+      html += '</div>';
+      chartEl.innerHTML = html;
     }
 
     function renderRequests(profile) {

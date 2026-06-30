@@ -29,16 +29,20 @@
         <a href="outages.html" class="header__nav-link">Отключения</a>
         <div class="header__nav-dropdown">
           <button class="header__nav-dropdown-toggle">Ещё <i class="fas fa-chevron-down"></i></button>
-          <div class="header__nav-dropdown-menu">
-            <a href="documents.html" class="header__nav-link">Документы</a>
-            <a href="repairs.html" class="header__nav-link">Ремонты</a>
-            <a href="gallery.html" class="header__nav-link">Галерея</a>
-            <a href="faq.html" class="header__nav-link">Вопросы-ответы</a>
-            <a href="vacancies.html" class="header__nav-link">Вакансии</a>
-            <a href="feedback.html" class="header__nav-link">Обратная связь</a>
-            <a href="house-registry.html" class="header__nav-link">Реестр домов</a>
-            <a href="contacts.html" class="header__nav-link">Контакты</a>
-          </div>
+            <div class="header__nav-dropdown-menu">
+              <a href="calendar.html" class="header__nav-link">События</a>
+              <a href="guides.html" class="header__nav-link">Памятки</a>
+              <a href="partners.html" class="header__nav-link">Партнёры</a>
+              <a href="polls.html" class="header__nav-link">Голосования</a>
+              <a href="documents.html" class="header__nav-link">Документы</a>
+              <a href="repairs.html" class="header__nav-link">Ремонты</a>
+              <a href="gallery.html" class="header__nav-link">Галерея</a>
+              <a href="faq.html" class="header__nav-link">Вопросы-ответы</a>
+              <a href="vacancies.html" class="header__nav-link">Вакансии</a>
+              <a href="feedback.html" class="header__nav-link">Обратная связь</a>
+              <a href="house-registry.html" class="header__nav-link">Реестр домов</a>
+              <a href="contacts.html" class="header__nav-link">Контакты</a>
+            </div>
         </div>
       </nav>
       <div class="header__right">
@@ -68,6 +72,15 @@
 
   <section class="page-section">
     <div class="container">
+      <div class="registry__filters" style="margin-bottom:24px;">
+        <select class="registry__filter-select" id="news-filter">
+          <option value="all">Все районы</option>
+          <option value="Кировский">Кировский</option>
+          <option value="Самарский">Самарский</option>
+          <option value="Днепровский">Днепровский</option>
+          <option value="Ярославский">Ярославский</option>
+        </select>
+      </div>
       <div class="full-list" id="news-list">
         <div class="loading-placeholder"><i class="fas fa-spinner fa-pulse"></i> Загрузка новостей...</div>
       </div>
@@ -93,19 +106,37 @@
         const em = document.getElementById('emergency-phone');
         if (em) em.textContent = data.emergencyPhone;
         const list = document.getElementById('news-list');
-        list.innerHTML = '';
-        for (const item of data.news) {
-          const card = document.createElement('div');
-          card.className = 'news-card';
-          card.innerHTML = `
-            <div class="news-card__date">${formatDate(item.date)}</div>
-            <h3 class="news-card__title">${item.title}</h3>
-            <p class="news-card__text">${item.short}</p>
-            <button class="news-card__link">Подробнее →</button>
-          `;
-          card.querySelector('.news-card__link').addEventListener('click', () => showNewsDetail(item));
-          list.appendChild(card);
+        const filter = document.getElementById('news-filter');
+
+        function renderNews(district) {
+          const items = district === 'all' ? data.news : data.news.filter(n => n.district === district || n.district === 'Все');
+          list.innerHTML = '';
+          if (items.length === 0) {
+            list.innerHTML = '<div class="news-card" style="grid-column:1/-1;text-align:center;color:var(--color-text-muted);">Нет новостей для выбранного района</div>';
+            return;
+          }
+          for (const item of items) {
+            const card = document.createElement('div');
+            card.className = 'news-card';
+            card.innerHTML = `
+              <div class="news-card__date">${formatDate(item.date)}</div>
+              <div style="font-size:0.7rem;color:var(--color-text-muted);margin-bottom:4px;">${item.district || ''}</div>
+              <h3 class="news-card__title">${item.title}</h3>
+              <p class="news-card__text">${item.short}</p>
+              <button class="news-card__link">Подробнее →</button>
+            `;
+            card.querySelector('.news-card__link').addEventListener('click', () => showNewsDetail(item));
+            list.appendChild(card);
+          }
         }
+
+        if (filter) {
+          filter.addEventListener('change', () => renderNews(filter.value));
+        }
+        renderNews('all');
+
+        // Remove loading placeholder
+        document.querySelectorAll('.loading-placeholder').forEach(el => el.remove());
       } catch (e) {
         document.getElementById('news-list').innerHTML = '<div class="error-placeholder"><i class="fas fa-exclamation-triangle"></i> Данные временно недоступны.</div>';
       }

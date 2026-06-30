@@ -110,18 +110,35 @@ const EMBEDDED_DATA = {
       "id": 1, "date": "2026-06-30", "title": "Плановое отключение горячей воды",
       "short": "В связи с профилактическими работами на теплосетях с 1 по 14 июля будет отключено горячее водоснабжение в Кировском и Самраском районах.",
       "full": "Уважаемые жители! Сообщаем, что в период с 1 по 14 июля 2026 года будет произведено плановое отключение горячего водоснабжения в Кировском и Самраском районах. Отключение связано с ежегодными профилактическими работами на тепловых сетях и котельных. Приносим извинения за временные неудобства. По всем вопросам обращайтесь в диспетчерскую службу по телефону +380-222-31-27.",
+      "district": "Кировский",
       "urgent": true
     },
     {
       "id": 2, "date": "2026-06-28", "title": "Новый тариф на вывоз ТКО с 1 июля",
       "short": "С 1 июля 2026 года вступают в силу новые тарифы на вывоз твёрдых коммунальных отходов.",
       "full": "С 1 июля 2026 года изменяются тарифы на услугу по обращению с твёрдыми коммунальными отходами. Новый тариф составит 56,11 ZD с человека в месяц. Перерасчёт будет произведён автоматически. С подробной информацией можно ознакомиться в разделе «Тарифы» на нашем сайте или в офисе ЖКС по адресу ул. Центральная, д. 1.",
+      "district": "Все",
       "urgent": false
     },
     {
       "id": 3, "date": "2026-06-25", "title": "Благоустройство дворовых территорий",
       "short": "В рамках программы «Комфортная городская среда» в 2026 году будут благоустроены 5 дворовых территорий.",
       "full": "Администрация города Загребенки совместно с ЖКС продолжает реализацию программы «Комфортная городская среда». В 2026 году запланировано благоустройство следующих дворовых территорий: ул. Кирова, д. 1–5, ул. Самарская, д. 3–7, ул. Днепровская, д. 10–14, ул. Парковая, д. 20–25, ул. Степная, д. 5–9. В рамках работ будут установлены новые скамейки, урны, детские площадки, проведено озеленение. Срок завершения работ — октябрь 2026 года.",
+      "district": "Все",
+      "urgent": false
+    },
+    {
+      "id": 4, "date": "2026-06-20", "title": "Субботник в Днепровском районе",
+      "short": "Приглашаем жителей Днепровского района принять участие в субботнике 27 июня.",
+      "full": "Уважаемые жители! В субботу 27 июня 2026 года в 10:00 состоится общегородской субботник в Днепровском районе. Сбор у дома № 10 по улице Днепровской. Приглашаем всех желающих! Инвентарь (грабли, мётлы, мешки) будет предоставлен ЖКС.",
+      "district": "Днепровский",
+      "urgent": false
+    },
+    {
+      "id": 5, "date": "2026-06-15", "title": "Проверка газового оборудования",
+      "short": "С 1 по 15 июля специалисты проведут плановую проверку газового оборудования в Ярославском районе.",
+      "full": "Уважаемые жители Ярославского района! С 1 по 15 июля 2026 года сотрудники газовой службы проведут плановую проверку внутридомового и внутриквартирного газового оборудования. Просим обеспечить доступ в квартиры. График можно уточнить в ЖКС №4.",
+      "district": "Ярославский",
       "urgent": false
     }
   ],
@@ -139,6 +156,31 @@ const EMBEDDED_DATA = {
     {"address": "ул. Самарская, д. 10","year": 2005,"floors": 10,"apartments": 120,"area": 7200,"districtId": 2,"managementStart": "2012"},
     {"address": "ул. Днепровская, д. 15","year": 1978,"floors": 5,"apartments": 70,"area": 3800,"districtId": 3,"managementStart": "2011"},
     {"address": "ул. Ярославская, д. 3","year": 2000,"floors": 12,"apartments": 144,"area": 8500,"districtId": 4,"managementStart": "2015"}
+  ],
+  "events": [
+    {"id": 1, "date": "2026-07-15", "title": "Встреча с жителями Кировского района", "description": "Открытая встреча с руководством ЖКС №1. Вопросы содержания домов и благоустройства.", "location": "ул. Кирова, д. 10, актовый зал", "time": "17:00", "district": "Кировский"},
+    {"id": 2, "date": "2026-07-20", "title": "Прямая линия с главным инженером", "description": "Звонки от жителей по вопросам отопления, водоснабжения и текущего ремонта.", "location": "по телефону +380-222-31-03", "time": "15:00–17:00", "district": "Все"},
+    {"id": 3, "date": "2026-07-25", "title": "День открытых дверей в ЖКС", "description": "Приём жителей по личным вопросам руководством службы. Предварительная запись не требуется.", "location": "ул. Центральная, д. 1", "time": "10:00–16:00", "district": "Все"},
+    {"id": 4, "date": "2026-08-01", "title": "Собрание старших по домам", "description": "План работ на август, отчёты по текущим ремонтам, обсуждение благоустройства.", "location": "ул. Самарская, д. 25, конференц-зал", "time": "16:00", "district": "Самарский"}
+  ],
+  "partners": [
+    {"name": "ООО «ТеплоЭнерго»", "description": "Поставщик тепловой энергии. Обслуживание тепловых сетей и котельных.", "phone": "+380-222-31-40", "website": ""},
+    {"name": "МУП «Водоканал Загребенки»", "description": "Водоснабжение и водоотведение. Холодная и горячая вода.", "phone": "+380-222-31-41", "website": ""},
+    {"name": "АО «ЗагребенкиГаз»", "description": "Поставка природного газа, обслуживание газового оборудования.", "phone": "+380-222-31-42", "website": ""},
+    {"name": "ООО «ЭлектроСети Плюс»", "description": "Передача и распределение электроэнергии.", "phone": "+380-222-31-43", "website": ""},
+    {"name": "УК «КомфортСервис»", "description": "Уборка придомовых территорий, вывоз ТКО, содержание контейнерных площадок.", "phone": "+380-222-31-44", "website": ""},
+    {"name": "ООО «ЛифтРемонт»", "description": "Обслуживание и ремонт лифтового оборудования.", "phone": "+380-222-31-45", "website": ""}
+  ],
+  "guides": [
+    {"id": 1, "title": "Как передать показания счётчиков", "icon": "fas fa-tachometer-alt", "steps": ["Зайдите в личный кабинет или откройте форму передачи показаний на главной странице.", "Введите номер лицевого счёта и адрес.", "Укажите показания холодной, горячей воды и электричества.", "Нажмите «Отправить». Показания будут приняты в обработку."], "note": "Показания принимаются ежемесячно до 25 числа."},
+    {"id": 2, "title": "Как оплатить коммунальные услуги", "icon": "fas fa-credit-card", "steps": ["Зайдите в личный кабинет и нажмите «Оплатить».", "Выберите способ оплаты: АТБ Банк или ФПИ PAY.", "На странице банка заполните реквизиты карты или телефона.", "Подтвердите платёж. Квитанция будет доступна для скачивания в личном кабинете."], "note": "Комиссия за перевод не взимается."},
+    {"id": 3, "title": "Как подать заявку на ремонт", "icon": "fas fa-tools", "steps": ["Нажмите кнопку «Аварийная заявка» в шапке сайта.", "Заполните форму: ФИО, адрес, телефон, категория и описание проблемы.", "При необходимости прикрепите фото.", "Нажмите «Отправить». Номер заявки придёт на телефон."], "note": "Аварийные заявки обрабатываются круглосуточно."},
+    {"id": 4, "title": "Как получить справку в ЖКС", "icon": "fas fa-file-alt", "steps": ["Обратитесь в отдел по работе с населением (ул. Центральная, д. 1, каб. 12).", "Имейте при себе паспорт и документы на квартиру.", "Напишите заявление на имя руководителя.", "Срок изготовления справки — до 3 рабочих дней."], "note": "Госпошлина не взимается."}
+  ],
+  "polls": [
+    {"id": 1, "question": "Какие дворовые работы нужно провести в первую очередь?", "options": ["Ремонт детских площадок", "Установка новых скамеек", "Освещение дворов", "Озеленение"], "votes": [45, 30, 60, 22], "active": true, "date": "2026-06-25"},
+    {"id": 2, "question": "Какой формат собраний жильцов вам удобнее?", "options": ["Очно в ЖКС", "Онлайн-трансляция", "Заочное голосование", "Чат в мессенджере"], "votes": [15, 42, 28, 35], "active": true, "date": "2026-06-20"},
+    {"id": 3, "question": "Нужен ли в городе дополнительный пункт приёма вторсырья?", "options": ["Да, очень нужно", "Скорее да", "Скорее нет", "Нет, не нужно"], "votes": [78, 45, 12, 8], "active": false, "date": "2026-06-10"}
   ]
 };
 
@@ -356,6 +398,374 @@ function renderSearchResults(results, container) {
   container.classList.add('active');
 }
 
+// ===== Accessibility =====
+function toggleAccessPanel() {
+  const panel = document.getElementById('accessPanel');
+  if (panel) panel.classList.toggle('active');
+}
+
+function setHighContrast(enabled) {
+  document.body.classList.toggle('high-contrast', enabled);
+  try { localStorage.setItem('zhks_contrast', enabled ? '1' : '0'); } catch(e) {}
+}
+
+function setLargeFont(enabled) {
+  document.body.classList.toggle('large-font', enabled);
+  try { localStorage.setItem('zhks_largefont', enabled ? '1' : '0'); } catch(e) {}
+}
+
+function initAccessibility() {
+  try {
+    if (localStorage.getItem('zhks_contrast') === '1') setHighContrast(true);
+    if (localStorage.getItem('zhks_largefont') === '1') setLargeFont(true);
+  } catch(e) {}
+}
+
+// ===== Captcha =====
+let _captchaAnswer = 0;
+
+function generateCaptcha() {
+  const a = Math.floor(Math.random() * 10) + 3;
+  const b = Math.floor(Math.random() * 10) + 1;
+  _captchaAnswer = a + b;
+  const el = document.getElementById('captchaQuestion');
+  if (el) el.textContent = a + ' + ' + b + ' = ?';
+}
+
+function validateCaptcha() {
+  const input = document.getElementById('captchaInput');
+  if (!input) return true;
+  const val = parseInt(input.value);
+  if (isNaN(val) || val !== _captchaAnswer) {
+    input.style.borderColor = 'var(--color-danger)';
+    return false;
+  }
+  input.style.borderColor = '';
+  return true;
+}
+
+// ===== PDF receipt =====
+function downloadReceipt(payment) {
+  var p = getProfile();
+  if (!p) return;
+  var addr = p.user.address;
+  var name = p.user.name;
+  var W = 595, H = 842;
+  var canvas = document.createElement('canvas');
+  canvas.width = W * 2; canvas.height = H * 2;
+  var ctx = canvas.getContext('2d');
+  ctx.scale(2, 2);
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = '#1A3B5C';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(20, 20, W - 40, H - 40);
+  ctx.font = 'bold 18px Unbounded, sans-serif';
+  ctx.fillStyle = '#1A3B5C';
+  ctx.textAlign = 'center';
+  ctx.fillText('ЖКС Загребенки', W / 2, 60);
+  ctx.font = '12px Inter, sans-serif';
+  ctx.fillStyle = '#4A4A4A';
+  ctx.fillText('КВИТАНЦИЯ ОБ ОПЛАТЕ № ' + (payment.id || Date.now().toString(36).toUpperCase()), W / 2, 85);
+  ctx.font = '10px Inter, sans-serif';
+  ctx.textAlign = 'left';
+  var y = 120;
+  var drawRow = function(label, value) {
+    ctx.fillStyle = '#1E1E1E';
+    ctx.font = 'bold 11px Inter, sans-serif';
+    ctx.fillText(label + ':', 50, y);
+    ctx.fillStyle = '#4A4A4A';
+    ctx.font = '11px Inter, sans-serif';
+    ctx.fillText(value || '—', 200, y);
+    y += 20;
+  };
+  drawRow('Плательщик', name);
+  drawRow('Адрес', addr);
+  drawRow('Период', payment.period || '—');
+  drawRow('Начислено', (payment.total || 0).toLocaleString('ru-RU', {minimumFractionDigits:2}) + ' ZD');
+  drawRow('Оплачено', (payment.paid || payment.total || 0).toLocaleString('ru-RU', {minimumFractionDigits:2}) + ' ZD');
+  drawRow('Дата оплаты', payment.date || new Date().toLocaleDateString('ru-RU'));
+  y += 20;
+  ctx.strokeStyle = '#E2E6EE';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(50, y); ctx.lineTo(W - 50, y);
+  ctx.stroke();
+  y += 20;
+  ctx.fillStyle = '#1E1E1E';
+  ctx.font = 'bold 11px Inter, sans-serif';
+  ctx.fillText('Детализация:', 50, y);
+  y += 22;
+  var details = [
+    { label: 'Содержание жилья', value: payment.maintenance },
+    { label: 'Текущий ремонт', value: payment.repair },
+    { label: 'Водоснабжение', value: payment.water },
+    { label: 'Отопление', value: payment.heating },
+    { label: 'Электроэнергия', value: payment.electricity }
+  ];
+  for (var i = 0; i < details.length; i++) {
+    ctx.fillStyle = '#4A4A4A';
+    ctx.font = '10px Inter, sans-serif';
+    ctx.fillText(details[i].label, 60, y);
+    ctx.textAlign = 'right';
+    ctx.fillText((details[i].value || 0).toLocaleString('ru-RU', {minimumFractionDigits:2}) + ' ZD', W - 60, y);
+    ctx.textAlign = 'left';
+    y += 18;
+  }
+  y += 20;
+  ctx.font = '9px Inter, sans-serif';
+  ctx.fillStyle = '#8A8A8A';
+  ctx.textAlign = 'center';
+  ctx.fillText('Данный чек сформирован автоматически и не имеет юридической силы.', W / 2, y);
+  y += 14;
+  ctx.fillText('ЖКС Загребенки • ' + new Date().toLocaleDateString('ru-RU'), W / 2, y);
+  var link = document.createElement('a');
+  link.download = 'receipt_' + Date.now() + '.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+// ===== Newsletter =====
+function subscribeNewsletter(e) {
+  if (e) e.preventDefault();
+  var input = document.getElementById('newsletterEmail');
+  if (!input || !input.value.trim()) return;
+  if (!validateCaptcha()) { alert('Решите капчу'); return; }
+  var consent = document.getElementById('newsletterConsent');
+  if (consent && !consent.checked) { alert('Примите согласие на обработку данных'); return; }
+  var btn = e ? e.target.querySelector('button') : null;
+  if (btn) { btn.disabled = true; btn.textContent = 'Подписка...'; }
+  setTimeout(function() {
+    var msg = document.getElementById('newsletterMsg');
+    if (msg) { msg.textContent = 'Вы подписались на новости!'; msg.style.color = 'var(--color-success)'; }
+    if (input) input.value = '';
+    if (btn) { btn.disabled = false; btn.textContent = 'Подписаться'; }
+    generateCaptcha();
+  }, 800);
+}
+
+// ===== Side menu =====
+function openSideMenu() {
+  var overlay = document.getElementById('sideMenuOverlay');
+  var menu = document.getElementById('sideMenu');
+  if (overlay) overlay.classList.add('active');
+  if (menu) menu.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSideMenu() {
+  var overlay = document.getElementById('sideMenuOverlay');
+  var menu = document.getElementById('sideMenu');
+  if (overlay) overlay.classList.remove('active');
+  if (menu) menu.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function buildSideMenu() {
+  var overlay = document.getElementById('sideMenuOverlay');
+  var menu = document.getElementById('sideMenu');
+  if (!menu) return;
+  var profile = getProfile();
+  var isAuth = isAuthenticated();
+  var currentPath = window.location.pathname.split('/').pop() || 'index.html';
+  var links = [
+    { href: 'index.html', icon: 'fa-home', label: 'Главная' },
+    { href: 'about.html', icon: 'fa-building', label: 'О нас' },
+    { href: 'news.html', icon: 'fa-newspaper', label: 'Новости' },
+    { href: 'districts.html', icon: 'fa-map-marked-alt', label: 'Участки' },
+    { href: 'services.html', icon: 'fa-concierge-bell', label: 'Услуги' },
+    { href: 'outages.html', icon: 'fa-calendar-times', label: 'Отключения' },
+    { href: 'calendar.html', icon: 'fa-calendar-alt', label: 'События' },
+    { href: 'guides.html', icon: 'fa-book', label: 'Памятки' },
+    { href: 'partners.html', icon: 'fa-handshake', label: 'Партнёры' },
+    { href: 'polls.html', icon: 'fa-poll', label: 'Голосования' }
+  ];
+  var moreLinks = [
+    { href: 'documents.html', icon: 'fa-folder', label: 'Документы' },
+    { href: 'repairs.html', icon: 'fa-hard-hat', label: 'Ремонты' },
+    { href: 'gallery.html', icon: 'fa-images', label: 'Галерея' },
+    { href: 'faq.html', icon: 'fa-question-circle', label: 'Вопросы-ответы' },
+    { href: 'vacancies.html', icon: 'fa-briefcase', label: 'Вакансии' },
+    { href: 'feedback.html', icon: 'fa-comment', label: 'Обратная связь' },
+    { href: 'house-registry.html', icon: 'fa-building', label: 'Реестр домов' },
+    { href: 'contacts.html', icon: 'fa-address-book', label: 'Контакты' }
+  ];
+  var html = '<div class="side-menu__header"><span class="side-menu__logo">ЖКС Загребенки</span><button class="side-menu__close" onclick="closeSideMenu()" aria-label="Закрыть">&times;</button></div>';
+  if (isAuth) {
+    var p = profile;
+    html += '<div class="side-menu__nav"><a href="profile.html" class="side-menu__link' + (currentPath === 'profile.html' ? ' side-menu__link--active' : '') + '"><i class="fas fa-user"></i> ' + (p ? p.user.name : 'Кабинет') + '</a></div>';
+  } else {
+    html += '<div class="side-menu__nav"><a href="#" class="side-menu__link" onclick="showLoginModal();return false;"><i class="fas fa-sign-in-alt"></i> Войти</a></div>';
+  }
+  html += '<div class="side-menu__nav">';
+  for (var i = 0; i < links.length; i++) {
+    var active = currentPath === links[i].href ? ' side-menu__link--active' : '';
+    html += '<a href="' + links[i].href + '" class="side-menu__link' + active + '"><i class="fas ' + links[i].icon + '"></i> ' + links[i].label + '</a>';
+  }
+  html += '</div>';
+  html += '<div class="side-menu__section">Информация</div><div class="side-menu__nav">';
+  for (var j = 0; j < moreLinks.length; j++) {
+    var act = currentPath === moreLinks[j].href ? ' side-menu__link--active' : '';
+    html += '<a href="' + moreLinks[j].href + '" class="side-menu__link' + act + '"><i class="fas ' + moreLinks[j].icon + '"></i> ' + moreLinks[j].label + '</a>';
+  }
+  html += '</div>';
+  menu.innerHTML = html;
+
+  if (overlay) {
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeSideMenu();
+    });
+    document.addEventListener('keydown', function handler(e) {
+      if (e.key === 'Escape') { closeSideMenu(); document.removeEventListener('keydown', handler); }
+    });
+  }
+}
+
+// ===== Autocomplete input =====
+function setupAutocomplete(inputId, dataList, onSelect) {
+  var input = document.getElementById(inputId);
+  if (!input) return;
+  var wrap = document.createElement('div');
+  wrap.className = 'autocomplete-wrap';
+  input.parentNode.insertBefore(wrap, input);
+  wrap.appendChild(input);
+  var dropdown = document.createElement('div');
+  dropdown.className = 'autocomplete-dropdown';
+  wrap.appendChild(dropdown);
+  input.addEventListener('input', function() {
+    var q = normalizeStr(this.value);
+    if (!q) { dropdown.classList.remove('active'); dropdown.innerHTML = ''; return; }
+    var matches = dataList.filter(function(item) { return normalizeStr(item).includes(q); }).slice(0, 8);
+    dropdown.innerHTML = '';
+    if (matches.length === 0) { dropdown.classList.remove('active'); return; }
+    for (var i = 0; i < matches.length; i++) {
+      var el = document.createElement('div');
+      el.className = 'autocomplete-item';
+      var idx = normalizeStr(matches[i]).indexOf(q);
+      var display = matches[i];
+      if (idx >= 0) {
+        display = matches[i].slice(0, idx) + '<strong>' + matches[i].slice(idx, idx + q.length) + '</strong>' + matches[i].slice(idx + q.length);
+      }
+      el.innerHTML = display;
+      el.addEventListener('click', function(val) {
+        return function() {
+          input.value = val;
+          dropdown.classList.remove('active');
+          if (onSelect) onSelect(val);
+        };
+      }(matches[i]));
+      dropdown.appendChild(el);
+    }
+    dropdown.classList.add('active');
+  });
+  document.addEventListener('click', function(e) {
+    if (!wrap.contains(e.target)) dropdown.classList.remove('active');
+  });
+  input.addEventListener('blur', function() {
+    setTimeout(function() { dropdown.classList.remove('active'); }, 200);
+  });
+}
+
+// ===== Poll helpers =====
+function votePoll(pollId, optionIndex) {
+  var data = appData || EMBEDDED_DATA;
+  var poll = data.polls.find(function(p) { return p.id === pollId; });
+  if (!poll || !poll.active) return;
+  var voted = getVotedPolls();
+  if (voted.indexOf(pollId) >= 0) { alert('Вы уже голосовали в этом опросе'); return; }
+  poll.votes[optionIndex] = (poll.votes[optionIndex] || 0) + 1;
+  voted.push(pollId);
+  try { localStorage.setItem('zhks_voted', JSON.stringify(voted)); } catch(e) {}
+  renderPollResults(pollId);
+}
+
+function getVotedPolls() {
+  try { return JSON.parse(localStorage.getItem('zhks_voted')) || []; } catch(e) { return []; }
+}
+
+function renderPollResults(pollId) {
+  var data = appData || EMBEDDED_DATA;
+  var poll = data.polls.find(function(p) { return p.id === pollId; });
+  if (!poll) return;
+  var total = poll.votes.reduce(function(a, b) { return a + b; }, 0);
+  var container = document.getElementById('pollResults' + pollId);
+  if (!container) return;
+  var form = document.getElementById('pollForm' + pollId);
+  if (form) form.style.display = 'none';
+  container.classList.add('active');
+  var html = '';
+  for (var i = 0; i < poll.options.length; i++) {
+    var pct = total > 0 ? Math.round((poll.votes[i] / total) * 100) : 0;
+    html += '<div style="margin-bottom:12px;"><div style="font-size:0.85rem;color:var(--color-text-secondary);margin-bottom:4px;">' + poll.options[i] + ' (' + pct + '%)</div><div class="poll-card__bar"><div class="poll-card__bar-fill" style="width:' + pct + '%;"></div></div><div class="poll-card__vote-count">' + poll.votes[i] + ' голосов</div></div>';
+  }
+  html += '<div style="font-size:0.78rem;color:var(--color-text-muted);">Всего голосов: ' + total + '</div>';
+  container.innerHTML = html;
+}
+
+// ===== Calendar helpers =====
+function renderCalendar(containerId, events, monthOffset) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+  var now = new Date();
+  var year = now.getFullYear();
+  var month = now.getMonth() + (monthOffset || 0);
+  if (month > 11) { month = 0; year++; }
+  if (month < 0) { month = 11; year--; }
+  var firstDay = new Date(year, month, 1).getDay();
+  if (firstDay === 0) firstDay = 7;
+  firstDay--;
+  var daysInMonth = new Date(year, month + 1, 0).getDate();
+  var today = now.getDate();
+  var monthNames = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+  var monthNamesShort = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+  var dayNames = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+  var html = '<div class="calendar__nav"><button class="calendar__nav-btn" onclick="renderCalendar(\'' + containerId + '\', events, ' + ((monthOffset||0) - 1) + ')"><i class="fas fa-chevron-left"></i></button><h3>' + monthNames[month] + ' ' + year + '</h3><button class="calendar__nav-btn" onclick="renderCalendar(\'' + containerId + '\', events, ' + ((monthOffset||0) + 1) + ')"><i class="fas fa-chevron-right"></i></button></div>';
+  html += '<div class="calendar__grid">';
+  for (var d = 0; d < 7; d++) html += '<div class="calendar__day-header">' + dayNames[d] + '</div>';
+  var dateStr = function(y, m, d) { return y + '-' + ('0' + (m + 1)).slice(-2) + '-' + ('0' + d).slice(-2); };
+  for (var i = 0; i < firstDay; i++) html += '<div class="calendar__day calendar__day--other"></div>';
+  for (var day = 1; day <= daysInMonth; day++) {
+    var cls = 'calendar__day';
+    if (day === today && month === now.getMonth() && year === now.getFullYear() && !monthOffset) cls += ' calendar__day--today';
+    var ds = dateStr(year, month, day);
+    var hasEvent = events && events.some(function(e) { return e.date === ds; });
+    if (hasEvent) cls += ' calendar__day--event';
+    html += '<div class="' + cls + '" data-date="' + ds + '">' + day + '</div>';
+  }
+  html += '</div>';
+  if (events && events.length > 0) {
+    var monthEvents = events.filter(function(e) {
+      var ed = new Date(e.date);
+      return ed.getMonth() === month && ed.getFullYear() === year;
+    }).sort(function(a, b) { return a.date.localeCompare(b.date); });
+    if (monthEvents.length > 0) {
+      html += '<div class="calendar__events">';
+      for (var k = 0; k < monthEvents.length; k++) {
+        var ev = monthEvents[k];
+        var ed = new Date(ev.date);
+        html += '<div class="calendar-event" onclick="showEventDetail(' + ev.id + ')"><div class="calendar-event__date"><div class="calendar-event__day">' + ed.getDate() + '</div><div class="calendar-event__month">' + monthNamesShort[ed.getMonth()] + '</div></div><div class="calendar-event__info"><h4>' + ev.title + '</h4><p>' + ev.description + '<br><small style="color:var(--color-text-muted)">' + (ev.time || '') + (ev.location ? ' • ' + ev.location : '') + '</small></p></div></div>';
+      }
+      html += '</div>';
+    }
+  }
+  container.innerHTML = html;
+  container.querySelectorAll('.calendar__day--event').forEach(function(el) {
+    el.addEventListener('click', function() {
+      var date = this.dataset.date;
+      var dayEvents = events.filter(function(e) { return e.date === date; });
+      if (dayEvents.length > 0) showEventDetail(dayEvents[0].id);
+    });
+  });
+}
+
+function showEventDetail(eventId) {
+  var data = appData || EMBEDDED_DATA;
+  var ev = data.events.find(function(e) { return e.id === eventId; });
+  if (!ev) return;
+  var html = '<div class="modal__info-row"><strong>Дата:</strong> ' + formatDate(ev.date) + '</div><div class="modal__info-row"><strong>Время:</strong> ' + (ev.time || '—') + '</div><div class="modal__info-row"><strong>Место:</strong> ' + (ev.location || '—') + '</div><div class="modal__info-row"><strong>Район:</strong> ' + (ev.district || '—') + '</div><div style="margin-top:16px;font-size:0.9rem;color:var(--color-text-secondary);line-height:1.6;">' + ev.description + '</div>';
+  openModal(html, ev.title);
+}
+
 // ===== Auth & Profile =====
 const AUTH_KEY = 'zhks_profile';
 
@@ -489,19 +899,43 @@ function updateAuthButton() {
   }
 }
 
+// ===== Inject UI elements =====
+function injectAccessPanel() {
+  if (document.getElementById('accessPanel')) return;
+  var header = document.querySelector('.header');
+  if (!header) return;
+  var panel = document.createElement('div');
+  panel.id = 'accessPanel';
+  panel.className = 'access-panel';
+  panel.innerHTML = '<div class="container access-panel__inner"><span class="access-panel__label"><i class="fas fa-eye"></i> Версия для слабовидящих</span><button onclick="setHighContrast(true);this.style.borderColor=\'#66b0ff\'" onmouseout="this.style.borderColor=\'\'"><i class="fas fa-adjust"></i> Высокий контраст</button><button onclick="setHighContrast(false)">Обычный режим</button><button onclick="setLargeFont(true)"><i class="fas fa-font"></i> Крупный шрифт</button><button onclick="setLargeFont(false)">Обычный шрифт</button><button class="access-panel__close" onclick="toggleAccessPanel()" aria-label="Закрыть">&times;</button></div>';
+  header.after(panel);
+}
+
+function injectSideMenu() {
+  if (document.getElementById('sideMenuOverlay')) return;
+  var overlay = document.createElement('div');
+  overlay.id = 'sideMenuOverlay';
+  overlay.className = 'side-menu-overlay';
+  document.body.appendChild(overlay);
+  var menu = document.createElement('div');
+  menu.id = 'sideMenu';
+  menu.className = 'side-menu';
+  document.body.appendChild(menu);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   updateAuthButton();
+  initAccessibility();
+  injectAccessPanel();
+  injectSideMenu();
+  buildSideMenu();
 
+  // Side menu burger toggle (replaces old mobile nav toggle)
   const burger = document.getElementById('burger-toggle');
-  const nav = document.querySelector('.header__nav');
-  if (burger && nav) {
-    burger.addEventListener('click', () => {
-      nav.classList.toggle('open');
-    });
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.header__inner') && nav.classList.contains('open')) {
-        nav.classList.remove('open');
-      }
+  if (burger) {
+    burger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openSideMenu();
     });
   }
 
@@ -530,4 +964,11 @@ document.addEventListener('DOMContentLoaded', () => {
     checkScroll();
     window.addEventListener('resize', checkScroll);
   }
+
+  // Newsletter form
+  const nf = document.getElementById('newsletterForm');
+  if (nf) nf.addEventListener('submit', subscribeNewsletter);
+
+  // Page enter animation
+  document.body.classList.add('page-enter');
 });
