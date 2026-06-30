@@ -37,11 +37,12 @@ body {
   line-height: 1.6;
   color: var(--color-text);
   background: var(--color-bg);
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   -webkit-tap-highlight-color: transparent;
   -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
 }
 
 /* improve touch behavior */
@@ -2420,20 +2421,17 @@ button:focus:not(:focus-visible) {
   top: 0;
   left: 0;
   width: 300px;
-  height: 100vh;
+  height: 100dvh;
   background: var(--color-bg);
   z-index: 2001;
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
-  box-shadow: 2px 0 20px rgba(0,0,0,0.1);
   transform: translateX(-100%);
   transition: transform 0.3s ease;
-  will-change: transform;
 }
-.side-menu.open { transform: translateX(0); }
-.side-menu.open { left: 0; }
+.side-menu.open { transform: translateX(0); box-shadow: 2px 0 20px rgba(0,0,0,0.1); }
 
 .side-menu__header {
   display: flex;
