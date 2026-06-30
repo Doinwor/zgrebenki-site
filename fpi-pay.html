@@ -1,14 +1,15 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ФПИ Банк* — Оплата</title>
+<title>Р¤РџР Р‘Р°РЅРє* вЂ” РћРїР»Р°С‚Р°</title>
 <link rel="icon" type="image/png" href="fpi-pay.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" media="none" onload="this.media=&#39;all&#39;">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -335,11 +336,11 @@
 <div class="container">
 
   <div class="logo">
-    <img src="fpi-pay.png" alt="ФПИ" onerror="this.style.display='none'">
-    <div class="brand-name">Фуфелшмертц Пакость Инкорпорейтед</div>
+    <img src="fpi-pay.png" alt="Р¤РџР" onerror="this.style.display='none'">
+    <div class="brand-name">Р¤СѓС„РµР»С€РјРµСЂС‚С† РџР°РєРѕСЃС‚СЊ РРЅРєРѕСЂРїРѕСЂРµР№С‚РµРґ</div>
   </div>
 
-  <div class="divider">— платёжный шлюз —</div>
+  <div class="divider">вЂ” РїР»Р°С‚С‘Р¶РЅС‹Р№ С€Р»СЋР· вЂ”</div>
 
   <!-- ===== DESKTOP QR (left) + INFO (right) ===== -->
   <div class="desktop-view" id="desktopView">
@@ -348,10 +349,10 @@
         <div id="qrCanvas" class="qr-canvas"></div>
       </div>
       <div class="qr-right">
-        <div class="label">К оплате</div>
-        <div class="amount" id="desktopAmount">—</div>
-        <div class="purpose" id="desktopPurpose">—</div>
-        <div class="hint"><i class="fas fa-qrcode"></i> Отсканируйте камерой телефона</div>
+        <div class="label">Рљ РѕРїР»Р°С‚Рµ</div>
+        <div class="amount" id="desktopAmount">вЂ”</div>
+        <div class="purpose" id="desktopPurpose">вЂ”</div>
+        <div class="hint"><i class="fas fa-qrcode"></i> РћС‚СЃРєР°РЅРёСЂСѓР№С‚Рµ РєР°РјРµСЂРѕР№ С‚РµР»РµС„РѕРЅР°</div>
       </div>
     </div>
   </div>
@@ -359,38 +360,38 @@
   <!-- ===== MOBILE PAYMENT ===== -->
   <div class="mobile-view" id="mobileView">
     <div class="pay-header">
-      <div class="merchant">ФПИ Банк* — Платежи</div>
-      <div class="amount" id="mobileAmount">—</div>
-      <div class="purpose" id="mobilePurpose">—</div>
+      <div class="merchant">Р¤РџР Р‘Р°РЅРє* вЂ” РџР»Р°С‚РµР¶Рё</div>
+      <div class="amount" id="mobileAmount">вЂ”</div>
+      <div class="purpose" id="mobilePurpose">вЂ”</div>
     </div>
 
     <div class="pay-methods">
-      <button class="active" onclick="selectMethod(this,'sbp')"><span class="pm-icon"><i class="fas fa-mobile-alt"></i></span>СБП</button>
-      <button onclick="selectMethod(this,'card')"><span class="pm-icon"><i class="fas fa-credit-card"></i></span>Карта</button>
+      <button class="active" onclick="selectMethod(this,'sbp')"><span class="pm-icon"><i class="fas fa-mobile-alt"></i></span>РЎР‘Рџ</button>
+      <button onclick="selectMethod(this,'card')"><span class="pm-icon"><i class="fas fa-credit-card"></i></span>РљР°СЂС‚Р°</button>
     </div>
 
     <div class="pay-box" id="sbpBox">
       <div class="form-group">
-        <label>Телефон</label>
+        <label>РўРµР»РµС„РѕРЅ</label>
         <input type="text" id="sbpPhone" placeholder="+7 (999) 000-00-00" maxlength="18">
       </div>
       <div class="form-group" id="codeGroup" style="display:none">
-        <label>Код из SMS</label>
+        <label>РљРѕРґ РёР· SMS</label>
         <input type="text" id="sbpCode" placeholder="0000" maxlength="4">
-        <div class="hint-text"><i class="fas fa-info-circle"></i> Подсказка: код будет 0000</div>
+        <div class="hint-text"><i class="fas fa-info-circle"></i> РџРѕРґСЃРєР°Р·РєР°: РєРѕРґ Р±СѓРґРµС‚ 0000</div>
       </div>
-      <button class="btn btn--primary" onclick="handleSbp()" id="sbpBtn">Оплатить по СБП</button>
+      <button class="btn btn--primary" onclick="handleSbp()" id="sbpBtn">РћРїР»Р°С‚РёС‚СЊ РїРѕ РЎР‘Рџ</button>
     </div>
 
     <div class="pay-box" id="cardBox" style="display:none">
       <div class="form-group">
-        <label>Номер карты</label>
+        <label>РќРѕРјРµСЂ РєР°СЂС‚С‹</label>
         <input type="text" id="cardNumber" placeholder="0000 0000 0000 0000" maxlength="19">
       </div>
       <div class="row">
         <div class="form-group">
-          <label>Срок</label>
-          <input type="text" id="cardExpiry" placeholder="ММ/ГГ" maxlength="5">
+          <label>РЎСЂРѕРє</label>
+          <input type="text" id="cardExpiry" placeholder="РњРњ/Р“Р“" maxlength="5">
         </div>
         <div class="form-group">
           <label>CVV</label>
@@ -398,25 +399,25 @@
         </div>
       </div>
       <div class="form-group">
-        <label>Владелец</label>
+        <label>Р’Р»Р°РґРµР»РµС†</label>
         <input type="text" id="cardName" placeholder="DOOFENSHMIRTZ H.">
       </div>
-      <button class="btn btn--primary" onclick="handleCard()">Оплатить</button>
+      <button class="btn btn--primary" onclick="handleCard()">РћРїР»Р°С‚РёС‚СЊ</button>
     </div>
   </div>
 
   <!-- ===== SUCCESS ===== -->
   <div class="success-screen" id="successScreen">
     <div class="icon"><i class="fas fa-check-circle"></i></div>
-    <div class="title">Платёж выполнен!</div>
-    <div class="desc">Деньги ушли в неизвестном направлении. Но мы уверены — всё хорошо.</div>
+    <div class="title">РџР»Р°С‚С‘Р¶ РІС‹РїРѕР»РЅРµРЅ!</div>
+    <div class="desc">Р”РµРЅСЊРіРё СѓС€Р»Рё РІ РЅРµРёР·РІРµСЃС‚РЅРѕРј РЅР°РїСЂР°РІР»РµРЅРёРё. РќРѕ РјС‹ СѓРІРµСЂРµРЅС‹ вЂ” РІСЃС‘ С…РѕСЂРѕС€Рѕ.</div>
     <div class="details" id="psDetails"></div>
   </div>
 
   <div class="footer">
-    ФПИ Банк* — шуточный сервис. Все операции демонстрационные.
-    <i>«Ваши финансы — наши пакости»</i>
-    Данный сайт не имеет отношения к настоящему ФПИ Банку и Илье Новке (Nowkie).
+    Р¤РџР Р‘Р°РЅРє* вЂ” С€СѓС‚РѕС‡РЅС‹Р№ СЃРµСЂРІРёСЃ. Р’СЃРµ РѕРїРµСЂР°С†РёРё РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅС‹Рµ.
+    <i>В«Р’Р°С€Рё С„РёРЅР°РЅСЃС‹ вЂ” РЅР°С€Рё РїР°РєРѕСЃС‚РёВ»</i>
+    Р”Р°РЅРЅС‹Р№ СЃР°Р№С‚ РЅРµ РёРјРµРµС‚ РѕС‚РЅРѕС€РµРЅРёСЏ Рє РЅР°СЃС‚РѕСЏС‰РµРјСѓ Р¤РџР Р‘Р°РЅРєСѓ Рё РР»СЊРµ РќРѕРІРєРµ (Nowkie).
   </div>
 </div>
 
@@ -468,7 +469,7 @@ function drawQr(elId, text) {
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold '+Math.round(lr*0.55)+'px Unbounded, sans-serif';
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText('ФПИ', cx, cy+1);
+    ctx.fillText('Р¤РџР', cx, cy+1);
   }
 }
 
@@ -476,14 +477,14 @@ function init() {
   var p = new URLSearchParams(window.location.search);
   var a = p.get('amount'), u = p.get('purpose'), id = p.get('id');
   if (!a || !id) {
-    document.body.innerHTML = '<div class="container" style="text-align:center;padding:80px 24px"><div style="font-size:3rem;margin-bottom:16px;color:var(--text-muted)"><i class="fas fa-skull"></i></div><h2 style="font-family:var(--font-heading);font-weight:700;margin-bottom:8px;font-size:1.1rem">Ссылка недействительна</h2><p style="color:var(--text-secondary);font-size:0.85rem">Для оплаты нужна ссылка с параметрами</p></div>';
+    document.body.innerHTML = '<div class="container" style="text-align:center;padding:80px 24px"><div style="font-size:3rem;margin-bottom:16px;color:var(--text-muted)"><i class="fas fa-skull"></i></div><h2 style="font-family:var(--font-heading);font-weight:700;margin-bottom:8px;font-size:1.1rem">РЎСЃС‹Р»РєР° РЅРµРґРµР№СЃС‚РІРёС‚РµР»СЊРЅР°</h2><p style="color:var(--text-secondary);font-size:0.85rem">Р”Р»СЏ РѕРїР»Р°С‚С‹ РЅСѓР¶РЅР° СЃСЃС‹Р»РєР° СЃ РїР°СЂР°РјРµС‚СЂР°РјРё</p></div>';
     return;
   }
   var fa = parseInt(a).toLocaleString()+' ZD';
   document.getElementById('desktopAmount').textContent = fa;
-  document.getElementById('desktopPurpose').textContent = u || 'Без назначения';
+  document.getElementById('desktopPurpose').textContent = u || 'Р‘РµР· РЅР°Р·РЅР°С‡РµРЅРёСЏ';
   document.getElementById('mobileAmount').textContent = fa;
-  document.getElementById('mobilePurpose').textContent = u || 'Без назначения';
+  document.getElementById('mobilePurpose').textContent = u || 'Р‘РµР· РЅР°Р·РЅР°С‡РµРЅРёСЏ';
 
   var link = 'https://doinwor.github.io/zgrebenki-site/fpi-pay.html?amount=' + encodeURIComponent(a) + '&purpose=' + encodeURIComponent(u||'') + '&id=' + id;
 
@@ -506,15 +507,15 @@ function handleSbp(){
   var phone=document.getElementById('sbpPhone').value.trim();
   var cg=document.getElementById('codeGroup'),ci=document.getElementById('sbpCode').value.trim();
   if(cg.style.display==='none'){
-    if(!phone||phone.replace(/\D/g,'').length<10){showToast('Введите номер телефона',1);return;}
+    if(!phone||phone.replace(/\D/g,'').length<10){showToast('Р’РІРµРґРёС‚Рµ РЅРѕРјРµСЂ С‚РµР»РµС„РѕРЅР°',1);return;}
     document.getElementById('sbpCode').value='0000';
     cg.style.display='block';
-    document.getElementById('sbpBtn').textContent='Подтвердить';
-    showToast('Код отправлен: 0000');
+    document.getElementById('sbpBtn').textContent='РџРѕРґС‚РІРµСЂРґРёС‚СЊ';
+    showToast('РљРѕРґ РѕС‚РїСЂР°РІР»РµРЅ: 0000');
     return;
   }
-  if(ci!=='0000'){showToast('Неверный код. Попробуйте 0000',1);return;}
-  finishPay('СБП');
+  if(ci!=='0000'){showToast('РќРµРІРµСЂРЅС‹Р№ РєРѕРґ. РџРѕРїСЂРѕР±СѓР№С‚Рµ 0000',1);return;}
+  finishPay('РЎР‘Рџ');
 }
 
 function handleCard(){
@@ -522,9 +523,9 @@ function handleCard(){
   var e=document.getElementById('cardExpiry').value.trim();
   var c=document.getElementById('cardCvv').value.trim();
   var nm=document.getElementById('cardName').value.trim();
-  if(!n||!e||!c||!nm){showToast('Заполните все поля',1);return;}
-  if(n.replace(/\s/g,'').length<13){showToast('Неверный номер карты',1);return;}
-  finishPay('Карта '+n.replace(/\s/g,'').slice(-4));
+  if(!n||!e||!c||!nm){showToast('Р—Р°РїРѕР»РЅРёС‚Рµ РІСЃРµ РїРѕР»СЏ',1);return;}
+  if(n.replace(/\s/g,'').length<13){showToast('РќРµРІРµСЂРЅС‹Р№ РЅРѕРјРµСЂ РєР°СЂС‚С‹',1);return;}
+  finishPay('РљР°СЂС‚Р° '+n.replace(/\s/g,'').slice(-4));
 }
 
 function finishPay(label){
@@ -534,11 +535,11 @@ function finishPay(label){
   document.getElementById('mobileView').classList.remove('show');
   document.getElementById('successScreen').classList.add('show');
   document.getElementById('psDetails').innerHTML=
-    '<div class="row"><span class="label">Сумма</span><span class="value">'+parseInt(amt).toLocaleString()+' ZD</span></div>'+
-    '<div class="row"><span class="label">Назначение</span><span class="value">'+(pur||'Без назначения')+'</span></div>'+
-    '<div class="row"><span class="label">Способ</span><span class="value">'+label+'</span></div>'+
-    '<div class="row"><span class="label">Дата</span><span class="value">'+new Date().toLocaleString('ru-RU')+'</span></div>';
-  showToast('Оплата прошла успешно');
+    '<div class="row"><span class="label">РЎСѓРјРјР°</span><span class="value">'+parseInt(amt).toLocaleString()+' ZD</span></div>'+
+    '<div class="row"><span class="label">РќР°Р·РЅР°С‡РµРЅРёРµ</span><span class="value">'+(pur||'Р‘РµР· РЅР°Р·РЅР°С‡РµРЅРёСЏ')+'</span></div>'+
+    '<div class="row"><span class="label">РЎРїРѕСЃРѕР±</span><span class="value">'+label+'</span></div>'+
+    '<div class="row"><span class="label">Р”Р°С‚Р°</span><span class="value">'+new Date().toLocaleString('ru-RU')+'</span></div>';
+  showToast('РћРїР»Р°С‚Р° РїСЂРѕС€Р»Р° СѓСЃРїРµС€РЅРѕ');
 }
 
 function showToast(msg,err){
@@ -569,3 +570,4 @@ document.addEventListener('DOMContentLoaded',function(){
 </script>
 </body>
 </html>
+

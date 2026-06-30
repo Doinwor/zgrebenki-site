@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   --color-primary: #1A3B5C;
   --color-primary-dark: #0F2B45;
   --color-accent: #2B7BEE;
@@ -40,6 +40,18 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* improve touch behavior */
+button, a, .btn, select, input, textarea, .profile-tab {
+  touch-action: manipulation;
+}
+
+/* prevent iOS zoom on input focus */
+input, textarea, select {
+  font-size: 16px !important;
 }
 
 a {
@@ -75,7 +87,6 @@ img {
 .section-title {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-stretch: condensed;
   font-size: 2rem;
   color: var(--color-primary);
   margin-bottom: 48px;
@@ -373,7 +384,6 @@ img {
 .page-header__title {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-stretch: condensed;
   font-size: 2rem;
   letter-spacing: 0.03em;
   margin-bottom: 8px;
@@ -424,7 +434,6 @@ img {
 .hero__title {
   font-family: var(--font-heading);
   font-weight: 800;
-  font-stretch: condensed;
   font-size: clamp(2.2rem, 6vw, 4rem);
   letter-spacing: 0.08em;
   line-height: 1.1;
@@ -2409,15 +2418,21 @@ button:focus:not(:focus-visible) {
 .side-menu {
   position: fixed;
   top: 0;
-  left: -300px;
+  left: 0;
   width: 300px;
   height: 100vh;
   background: var(--color-bg);
   z-index: 2001;
-  transition: left 0.3s ease;
   overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   box-shadow: 2px 0 20px rgba(0,0,0,0.1);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  will-change: transform;
 }
+.side-menu.open { transform: translateX(0); }
 .side-menu.open { left: 0; }
 
 .side-menu__header {
@@ -2799,7 +2814,7 @@ body.large-font .header__nav-dropdown-toggle { font-size: 1rem; }
 }
 .poll-card--closed { opacity: 0.7; }
 .poll-card--closed .poll-card__question::after {
-  content: ' (закрыт)';
+  content: ' (Р·Р°РєСЂС‹С‚)';
   font-size: 0.7rem;
   color: var(--color-text-muted);
   font-weight: 400;
@@ -3477,4 +3492,24 @@ button {
     align-items: center;
   }
 }
+
+/* ===== Disable hover effects on touch devices ===== */
+@media (hover: none) and (pointer: coarse) {
+  .btn:hover,
+  a:hover,
+  .header__nav-link:hover,
+  .hero__action-card:hover,
+  .news-card:hover,
+  .district-card:hover,
+  .feature:hover,
+  .side-menu__link:hover,
+  .profile-tab:hover {
+    transform: none !important;
+  }
+  .btn--primary:hover { background: var(--color-accent); }
+  .btn--outline:hover { background: transparent; color: var(--color-accent); }
+  .btn--ghost:hover { background: transparent; color: var(--color-text-secondary); }
+  .btn--danger:hover { background: var(--color-danger); }
+}
+
 
