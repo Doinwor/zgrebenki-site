@@ -83,8 +83,8 @@ const EMBEDDED_DATA = {
     {
       "id": 1, "name": "ЖКС №1 Кировского района", "address": "ул. Кирова, д. 10", "phone": "+380-222-31-11",
       "head": "Иванов Иван Иванович", "headSchedule": "Вт, Чт 14:00–16:00",
-      "streets": ["ул. Кирова", "ул. Парковая"],
-      "homes": ["ул. Кирова, д. 1","ул. Кирова, д. 2","ул. Кирова, д. 3","ул. Кирова, д. 4","ул. Кирова, д. 5","ул. Кирова, д. 6","ул. Кирова, д. 7","ул. Кирова, д. 8","ул. Кирова, д. 9","ул. Кирова, д. 10","ул. Кирова, д. 11","ул. Кирова, д. 12","ул. Кирова, д. 14","ул. Кирова, д. 16","ул. Кирова, д. 18","ул. Парковая, д. 1","ул. Парковая, д. 2","ул. Парковая, д. 3","ул. Парковая, д. 4","ул. Парковая, д. 5","ул. Парковая, д. 6","ул. Парковая, д. 7","ул. Парковая, д. 8","ул. Парковая, д. 9","ул. Парковая, д. 10","ул. Парковая, д. 11","ул. Парковая, д. 12","ул. Парковая, д. 13","ул. Парковая, д. 14","ул. Парковая, д. 15"]
+      "streets": ["ул. Кирова", "ул. Парковая", "ул. Собянина"],
+      "homes": ["ул. Кирова, д. 1","ул. Кирова, д. 2","ул. Кирова, д. 3","ул. Кирова, д. 4","ул. Кирова, д. 5","ул. Кирова, д. 6","ул. Кирова, д. 7","ул. Кирова, д. 8","ул. Кирова, д. 9","ул. Кирова, д. 10","ул. Кирова, д. 11","ул. Кирова, д. 12","ул. Кирова, д. 14","ул. Кирова, д. 16","ул. Кирова, д. 18","ул. Парковая, д. 1","ул. Парковая, д. 2","ул. Парковая, д. 3","ул. Парковая, д. 4","ул. Парковая, д. 5","ул. Парковая, д. 6","ул. Парковая, д. 7","ул. Парковая, д. 8","ул. Парковая, д. 9","ул. Парковая, д. 10","ул. Парковая, д. 11","ул. Парковая, д. 12","ул. Парковая, д. 13","ул. Парковая, д. 14","ул. Парковая, д. 15","ул. Собянина, д. 1","ул. Собянина, д. 3","ул. Собянина, д. 5","ул. Собянина, д. 7","ул. Собянина, д. 9"]
     },
     {
       "id": 2, "name": "ЖКС №2 Самраского района", "address": "ул. Самарская, д. 25", "phone": "+380-222-31-12",
@@ -101,8 +101,20 @@ const EMBEDDED_DATA = {
     {
       "id": 4, "name": "ЖКС №4 Ярославского района", "address": "ул. Ярославская, д. 8", "phone": "+380-222-31-14",
       "head": "Кузнецов Дмитрий Сергеевич", "headSchedule": "Вт, Чт 9:00–11:00",
-      "streets": ["ул. Ярославская", "ул. Северная"],
-      "homes": ["ул. Ярославская, д. 1","ул. Ярославская, д. 2","ул. Ярославская, д. 3","ул. Ярославская, д. 4","ул. Ярославская, д. 5","ул. Ярославская, д. 6","ул. Ярославская, д. 7","ул. Ярославская, д. 8","ул. Ярославская, д. 9","ул. Ярославская, д. 10","ул. Ярославская, д. 11","ул. Ярославская, д. 12","ул. Северная, д. 1","ул. Северная, д. 2","ул. Северная, д. 3","ул. Северная, д. 4","ул. Северная, д. 5","ул. Северная, д. 6","ул. Северная, д. 7","ул. Северная, д. 8","ул. Северная, д. 9","ул. Северная, д. 10"]
+      "streets": ["ул. Ярославская", "ул. Северная", "ул. Набокова"],
+      "homes": ["ул. Ярославская, д. 1","ул. Ярославская, д. 2","ул. Ярославская, д. 3","ул. Ярославская, д. 4","ул. Ярославская, д. 5","ул. Ярославская, д. 6","ул. Ярославская, д. 7","ул. Ярославская, д. 8","ул. Ярославская, д. 9","ул. Ярославская, д. 10","ул. Ярославская, д. 11","ул. Ярославская, д. 12","ул. Северная, д. 1","ул. Северная, д. 2","ул. Северная, д. 3","ул. Северная, д. 4","ул. Северная, д. 5","ул. Северная, д. 6","ул. Северная, д. 7","ул. Северная, д. 8","ул. Северная, д. 9","ул. Северная, д. 10","ул. Набокова, д. 1","ул. Набокова, д. 2","ул. Набокова, д. 2, корп. 2","ул. Набокова, д. 3","ул. Набокова, д. 4"]
+    },
+    {
+      "id": 5, "name": "ЖКС №5 Купаловского района", "address": "ул. Виктора Кублая, д. 10", "phone": "+380-222-31-15",
+      "head": "Тимофеев Андрей Валерьевич", "headSchedule": "Пн, Ср 14:00–16:00",
+      "streets": ["ул. Виктора Кублая"],
+      "homes": ["ул. Виктора Кублая, д. 1","ул. Виктора Кублая, д. 2","ул. Виктора Кублая, д. 3","ул. Виктора Кублая, д. 4","ул. Виктора Кублая, д. 5"]
+    },
+    {
+      "id": 6, "name": "ЖКС №6 Фрунзенского района", "address": "ул. Фрунзенская, д. 5", "phone": "+380-222-31-16",
+      "head": "Фёдоров Игорь Павлович", "headSchedule": "Ср, Пт 10:00–12:00",
+      "streets": ["ул. Фрунзенская"],
+      "homes": ["ул. Фрунзенская, д. 1"]
     }
   ],
   "news": [
@@ -155,7 +167,9 @@ const EMBEDDED_DATA = {
     {"address": "ул. Кирова, д. 5","year": 1990,"floors": 9,"apartments": 108,"area": 5800,"districtId": 1,"managementStart": "2010"},
     {"address": "ул. Самарская, д. 10","year": 2005,"floors": 10,"apartments": 120,"area": 7200,"districtId": 2,"managementStart": "2012"},
     {"address": "ул. Днепровская, д. 15","year": 1978,"floors": 5,"apartments": 70,"area": 3800,"districtId": 3,"managementStart": "2011"},
-    {"address": "ул. Ярославская, д. 3","year": 2000,"floors": 12,"apartments": 144,"area": 8500,"districtId": 4,"managementStart": "2015"}
+    {"address": "ул. Ярославская, д. 3","year": 2000,"floors": 12,"apartments": 144,"area": 8500,"districtId": 4,"managementStart": "2015"},
+    {"address": "ул. Набокова, д. 2, корп. 2","year": 1995,"floors": 9,"apartments": 108,"area": 5200,"districtId": 4,"managementStart": "2016"},
+    {"address": "ул. Фрунзенская, д. 1","year": 2002,"floors": 9,"apartments": 144,"area": 5200,"districtId": 6,"managementStart": "2012"}
   ],
   "events": [
     {"id": 1, "date": "2026-07-15", "title": "Встреча с жителями Кировского района", "description": "Открытая встреча с руководством ЖКС №1. Вопросы содержания домов и благоустройства.", "location": "ул. Кирова, д. 10, актовый зал", "time": "17:00", "district": "Кировский"},
@@ -448,8 +462,10 @@ function validateCaptcha() {
 function downloadReceipt(payment) {
   var p = getProfile();
   if (!p) return;
-  var addr = p.user.address;
-  var name = p.user.name;
+  var prop = getActiveProperty(p);
+  if (!prop) return;
+  var addr = prop.address;
+  var name = p.name;
   var W = 595, H = 842;
   var canvas = document.createElement('canvas');
   canvas.width = W * 2; canvas.height = H * 2;
@@ -593,7 +609,7 @@ function buildSideMenu() {
   var html = '<div class="side-menu__header"><span class="side-menu__logo">ЖКС Загребенки</span><button class="side-menu__close" onclick="closeSideMenu()" aria-label="Закрыть">&times;</button></div>';
   if (isAuth) {
     var p = profile;
-    html += '<div class="side-menu__nav"><a href="profile.html" class="side-menu__link' + (currentPath === 'profile.html' ? ' side-menu__link--active' : '') + '"><i class="fas fa-user"></i> ' + (p ? p.user.name : 'Кабинет') + '</a></div>';
+    html += '<div class="side-menu__nav"><a href="profile.html" class="side-menu__link' + (currentPath === 'profile.html' ? ' side-menu__link--active' : '') + '"><i class="fas fa-user"></i> ' + (p ? p.name : 'Кабинет') + '</a></div>';
   } else {
     html += '<div class="side-menu__nav"><a href="#" class="side-menu__link" onclick="showLoginModal();return false;"><i class="fas fa-sign-in-alt"></i> Войти</a></div>';
   }
@@ -766,6 +782,141 @@ function showEventDetail(eventId) {
   openModal(html, ev.title);
 }
 
+// ===== User Database =====
+var USER_DB = {
+  'Lokiq': {
+    login: 'Lokiq', pin: '445996',
+    name: 'Захаров Алексей С.',
+    phone: '+380-222-31-15', email: 'alexey.z@example.com',
+    properties: [
+      {
+        id: 'prop_1', isPrimary: true,
+        nickname: 'Основной дом',
+        address: 'ул. Собянина, д. 1',
+        districtId: 1,
+        apartment: { area: 96.0, rooms: 4, registered: 3, account: '1234567890' },
+        building: { year: 2008, floors: 2, apartments: 1, senior: '—', nextCapitalRepair: '—' },
+        balance: -1120.00,
+        payments: createMockPayments(-1120.00),
+        meters: { coldWater: { number: 'A-7712', installed: '10.01.2020', nextCheck: '10.01.2028' }, hotWater: { number: null, installed: null, nextCheck: null }, electricity: { number: 'E-3344', installed: '05.03.2019', nextCheck: '05.03.2029' } },
+        meterHistory: [
+          { type: 'coldWater', value: 42.3, date: '25.05.2026' }, { type: 'electricity', value: 1870, date: '25.05.2026' },
+          { type: 'coldWater', value: 39.1, date: '25.04.2026' }, { type: 'electricity', value: 1750, date: '25.04.2026' }
+        ],
+        requests: [
+          { id: 1, category: 'Кровля', desc: 'Протечка крыши после дождя', status: 'in-progress', date: '18.06.2026', comment: 'Заявка передана мастеру' },
+          { id: 2, category: 'Электрика', desc: 'Не работает розетка на веранде', status: 'done', date: '02.06.2026', comment: 'Неисправность устранена' }
+        ]
+      },
+      {
+        id: 'prop_2', isPrimary: false,
+        nickname: 'ул. Кирова 9-8',
+        address: 'ул. Кирова, д. 9, п. 1, кв. 8',
+        districtId: 1,
+        apartment: { area: 48.2, rooms: 2, registered: 2, account: '1234567892' },
+        building: { year: 1988, floors: 5, apartments: 60, senior: 'Козлов Игорь В.', nextCapitalRepair: '2027' },
+        balance: -680.00,
+        payments: createMockPayments(-680.00),
+        meters: { coldWater: { number: '21345', installed: '10.01.2020', nextCheck: '10.01.2028' }, hotWater: { number: '21346', installed: '10.01.2020', nextCheck: '10.01.2028' }, electricity: { number: '21347', installed: '05.03.2019', nextCheck: '05.03.2027' } },
+        meterHistory: [
+          { type: 'coldWater', value: 88.3, date: '25.05.2026' }, { type: 'hotWater', value: 42.1, date: '25.05.2026' }, { type: 'electricity', value: 4100, date: '25.05.2026' },
+          { type: 'coldWater', value: 84.7, date: '25.04.2026' }, { type: 'hotWater', value: 40.2, date: '25.04.2026' }, { type: 'electricity', value: 3980, date: '25.04.2026' }
+        ],
+        requests: []
+      },
+      {
+        id: 'prop_3', isPrimary: false,
+        nickname: 'Фрунзенская 1-27',
+        address: 'Фрунзенская ул., д. 1, п. 1, кв. 27',
+        districtId: 6,
+        apartment: { area: 33.5, rooms: 1, registered: 1, account: '1234567893' },
+        building: { year: 2002, floors: 9, apartments: 144, senior: 'Белова Ирина К.', nextCapitalRepair: '2030' },
+        balance: -415.00,
+        payments: createMockPayments(-415.00),
+        meters: { coldWater: { number: '31451', installed: '15.06.2021', nextCheck: '15.06.2029' }, hotWater: { number: '31452', installed: '15.06.2021', nextCheck: '15.06.2029' }, electricity: { number: '31453', installed: '20.11.2020', nextCheck: '20.11.2028' } },
+        meterHistory: [
+          { type: 'coldWater', value: 41.2, date: '25.05.2026' }, { type: 'hotWater', value: 22.8, date: '25.05.2026' }, { type: 'electricity', value: 2150, date: '25.05.2026' },
+          { type: 'coldWater', value: 39.6, date: '25.04.2026' }, { type: 'hotWater', value: 21.1, date: '25.04.2026' }, { type: 'electricity', value: 2080, date: '25.04.2026' }
+        ],
+        requests: []
+      },
+      {
+        id: 'prop_4', isPrimary: false,
+        nickname: 'Кублая 2-90',
+        address: 'ул. Виктора Кублая, д. 2, п. 2, кв. 90',
+        districtId: 5,
+        apartment: { area: 72.0, rooms: 3, registered: 2, account: '1234567894' },
+        building: { year: 2010, floors: 16, apartments: 192, senior: 'Громов Денис А.', nextCapitalRepair: '2035' },
+        balance: -950.00,
+        payments: createMockPayments(-950.00),
+        meters: { coldWater: { number: '41561', installed: '01.08.2022', nextCheck: '01.08.2030' }, hotWater: { number: '41562', installed: '01.08.2022', nextCheck: '01.08.2030' }, electricity: { number: '41563', installed: '10.03.2021', nextCheck: '10.03.2029' } },
+        meterHistory: [
+          { type: 'coldWater', value: 112.5, date: '25.05.2026' }, { type: 'hotWater', value: 68.3, date: '25.05.2026' }, { type: 'electricity', value: 6200, date: '25.05.2026' },
+          { type: 'coldWater', value: 108.1, date: '25.04.2026' }, { type: 'hotWater', value: 64.7, date: '25.04.2026' }, { type: 'electricity', value: 6010, date: '25.04.2026' }
+        ],
+        requests: []
+      },
+      {
+        id: 'prop_5', isPrimary: false,
+        nickname: 'Набокова 2-10',
+        address: 'ул. Набокова, д. 2, корп. 2, п. 2, кв. 10',
+        districtId: 4,
+        apartment: { area: 56.8, rooms: 2, registered: 3, account: '1234567895' },
+        building: { year: 1995, floors: 9, apartments: 108, senior: 'Дмитриева Ольга В.', nextCapitalRepair: '2029' },
+        balance: -590.00,
+        payments: createMockPayments(-590.00),
+        meters: { coldWater: { number: '51671', installed: '20.04.2020', nextCheck: '20.04.2028' }, hotWater: { number: '51672', installed: '20.04.2020', nextCheck: '20.04.2028' }, electricity: { number: '51673', installed: '15.09.2019', nextCheck: '15.09.2027' } },
+        meterHistory: [
+          { type: 'coldWater', value: 72.8, date: '25.05.2026' }, { type: 'hotWater', value: 38.4, date: '25.05.2026' }, { type: 'electricity', value: 3800, date: '25.05.2026' },
+          { type: 'coldWater', value: 69.5, date: '25.04.2026' }, { type: 'hotWater', value: 36.2, date: '25.04.2026' }, { type: 'electricity', value: 3650, date: '25.04.2026' }
+        ],
+        requests: []
+      }
+    ]
+  },
+  'Oleg': {
+    login: 'Oleg', pin: '160013',
+    name: 'Мудрук Олег Т.',
+    phone: '+380-222-31-16', email: 'oleg.m@example.com',
+    properties: [
+      {
+        id: 'prop_1', isPrimary: true,
+        nickname: 'Основная квартира',
+        address: 'ул. Самарская, д. 10, кв. 8',
+        districtId: 2,
+        apartment: { area: 68.7, rooms: 3, registered: 4, account: '2234567890' },
+        building: { year: 2005, floors: 10, apartments: 120, senior: 'Громов Павел А.', nextCapitalRepair: '2030' },
+        balance: -2341.50,
+        payments: createMockPayments(-2341.50),
+        meters: { coldWater: { number: '99881', installed: '20.06.2021', nextCheck: '20.06.2029' }, hotWater: { number: '99882', installed: '20.06.2021', nextCheck: '20.06.2029' }, electricity: { number: '77665', installed: '15.09.2020', nextCheck: '15.09.2028' } },
+        meterHistory: [
+          { type: 'coldWater', value: 210.3, date: '25.05.2026' }, { type: 'hotWater', value: 118.7, date: '25.05.2026' }, { type: 'electricity', value: 12300, date: '25.05.2026' },
+          { type: 'coldWater', value: 204.1, date: '25.04.2026' }, { type: 'hotWater', value: 112.4, date: '25.04.2026' }, { type: 'electricity', value: 11980, date: '25.04.2026' }
+        ],
+        requests: [
+          { id: 1, category: 'Кровля', desc: 'Протечка крыши над кухней', status: 'in-progress', date: '15.06.2026', comment: 'Бригада выедет 28.06' }
+        ]
+      },
+      {
+        id: 'prop_2', isPrimary: false,
+        nickname: 'Дача / летний домик',
+        address: 'ул. Степная, д. 25',
+        districtId: 2,
+        apartment: { area: 45.0, rooms: 2, registered: 0, account: '2234567892' },
+        building: { year: 2000, floors: 2, apartments: 1, senior: '—', nextCapitalRepair: '—' },
+        balance: -315.00,
+        payments: createMockPayments(-315.00),
+        meters: { coldWater: { number: '55443', installed: '01.05.2022', nextCheck: '01.05.2030' }, hotWater: { number: '—', installed: '—', nextCheck: '—' }, electricity: { number: '55444', installed: '01.05.2022', nextCheck: '01.05.2030' } },
+        meterHistory: [
+          { type: 'coldWater', value: 14.2, date: '25.05.2026' }, { type: 'electricity', value: 450, date: '25.05.2026' },
+          { type: 'coldWater', value: 12.8, date: '25.04.2026' }, { type: 'electricity', value: 410, date: '25.04.2026' }
+        ],
+        requests: []
+      }
+    ]
+  }
+};
+
 // ===== Auth & Profile =====
 const AUTH_KEY = 'zhks_profile';
 
@@ -788,6 +939,59 @@ function logout() {
   try { localStorage.removeItem(AUTH_KEY); } catch(e) {}
 }
 
+function getUserData(login) {
+  return USER_DB[login] || null;
+}
+
+function getUserProperties(login) {
+  var key = 'zhks_props_' + login;
+  try {
+    var saved = localStorage.getItem(key);
+    if (saved) return JSON.parse(saved);
+  } catch(e) {}
+  var user = USER_DB[login];
+  return user ? JSON.parse(JSON.stringify(user.properties)) : null;
+}
+
+function saveUserProperties(login, properties) {
+  try {
+    localStorage.setItem('zhks_props_' + login, JSON.stringify(properties));
+  } catch(e) {}
+}
+
+function getActiveProperty(profile) {
+  if (!profile) return null;
+  var props = getUserProperties(profile.login);
+  if (!props) return null;
+  return props.find(function(p) { return p.id === profile.activePropertyId; }) || props[0] || null;
+}
+
+function getActivePropertyIndex(profile) {
+  if (!profile) return -1;
+  var user = getUserData(profile.login);
+  if (!user) return -1;
+  return user.properties.findIndex(function(p) { return p.id === profile.activePropertyId; });
+}
+
+function getDistrictName(districtId) {
+  var ds = EMBEDDED_DATA && EMBEDDED_DATA.districts;
+  if (!ds) return '';
+  for (var i = 0; i < ds.length; i++) {
+    if (ds[i].id === districtId) return ds[i].name || '';
+  }
+  return '';
+}
+
+function switchProperty(propertyId) {
+  var p = getProfile();
+  if (!p) return;
+  p.activePropertyId = propertyId;
+  saveProfile(p);
+  if (window.location.pathname.includes('profile.html')) {
+    window.location.reload();
+  }
+}
+
 function showLoginModal() {
   const existing = document.querySelector('.modal-overlay.active');
   if (existing) return;
@@ -801,9 +1005,14 @@ function showLoginModal() {
       <div id="login-form-container">
         <form id="login-form">
           <div class="form__group">
-            <label class="form__label">Введите любой ПИН-код для входа</label>
+            <label class="form__label">Логин</label>
+            <input class="form__input" id="login-username" type="text" required placeholder="Введите логин" autocomplete="off">
+          </div>
+          <div class="form__group">
+            <label class="form__label">ПИН-код</label>
             <input class="form__input" id="login-pin" type="password" inputmode="numeric" maxlength="6" required placeholder="Введите ПИН-код" autocomplete="off">
           </div>
+          <div id="login-error" style="color:var(--color-danger);font-size:0.82rem;margin-bottom:12px;display:none;"></div>
           <button type="submit" class="btn btn--primary form__submit">Войти</button>
         </form>
       </div>
@@ -821,31 +1030,18 @@ function showLoginModal() {
   const form = overlay.querySelector('#login-form');
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const pin = overlay.querySelector('#login-pin').value;
-    if (!pin) return;
-    let profile = getProfile();
-    if (!profile) {
-      profile = {
-        pin: pin,
-        user: { name: 'Иванов Иван Иванович', phone: '+380-222-31-XX', email: 'ivanov@example.com', address: 'ул. Кирова, д. 5, кв. 42', districtId: 1 },
-        apartment: { area: 54.3, rooms: 2, registered: 3, account: '1234567890' },
-        building: { year: 1990, floors: 9, apartments: 108, senior: 'Петрова Анна Сергеевна', nextCapitalRepair: '2028' },
-        balance: -1847.32,
-        payments: createMockPayments(),
-        meters: { coldWater: { number: '38721', installed: '15.03.2019', nextCheck: '15.03.2027' }, hotWater: { number: '38722', installed: '15.03.2019', nextCheck: '15.03.2027' }, electricity: { number: '59341', installed: '20.11.2018', nextCheck: '20.11.2026' } },
-        meterHistory: [
-          { type: 'coldWater', value: 184.5, date: '25.05.2026' },
-          { type: 'hotWater', value: 97.2, date: '25.05.2026' },
-          { type: 'electricity', value: 8452, date: '25.05.2026' },
-          { type: 'coldWater', value: 179.8, date: '25.04.2026' },
-          { type: 'hotWater', value: 92.1, date: '25.04.2026' },
-          { type: 'electricity', value: 8230, date: '25.04.2026' }
-        ],
-        requests: [
-          { id: 1, category: 'Сантехника', desc: 'Течёт смеситель на кухне', status: 'in-progress', date: '20.06.2026', comment: 'Заявка передана мастеру' },
-          { id: 2, category: 'Электрика', desc: 'Не работает розетка в комнате', status: 'done', date: '05.06.2026', comment: 'Неисправность устранена' }
-        ]
-      };
+    const login = overlay.querySelector('#login-username').value.trim();
+    const pin = overlay.querySelector('#login-pin').value.trim();
+    const errEl = overlay.querySelector('#login-error');
+    if (!login || !pin) { errEl.textContent = 'Введите логин и ПИН-код'; errEl.style.display = 'block'; return; }
+    var user = USER_DB[login];
+    if (!user || user.pin !== pin) {
+      errEl.textContent = 'Неверный логин или ПИН-код'; errEl.style.display = 'block'; return;
+    }
+    var profile = getProfile();
+    if (!profile || profile.login !== login) {
+      var primaryProp = user.properties.find(function(p) { return p.isPrimary; }) || user.properties[0];
+      profile = { login: login, name: user.name, activePropertyId: primaryProp ? primaryProp.id : null };
       saveProfile(profile);
     }
     close();
@@ -858,45 +1054,102 @@ function showLoginModal() {
   });
 }
 
-function createMockPayments() {
+function createMockPayments(balance) {
   const now = new Date();
   const months = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
   const res = [];
+  var total = Math.abs(balance || 1741.90) / 6;
   for (let i = 0; i < 6; i++) {
     const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
     const dateStr = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+    var amt = Math.round(total * 100) / 100;
     res.push({
       period: months[d.getMonth()] + ' ' + d.getFullYear(),
       date: dateStr,
-      maintenance: 785.20, repair: 253.80, water: 412.50, heating: 0, electricity: 290.40,
-      total: 1741.90, paid: i === 0 ? null : 1741.90, status: i === 0 ? 'pending' : 'paid'
+      maintenance: Math.round(amt * 0.45 * 100) / 100,
+      repair: Math.round(amt * 0.15 * 100) / 100,
+      water: Math.round(amt * 0.24 * 100) / 100,
+      heating: 0,
+      electricity: Math.round(amt * 0.16 * 100) / 100,
+      total: amt, paid: i === 0 ? null : amt, status: i === 0 ? 'pending' : 'paid'
     });
   }
   return res;
 }
 
 function updateAuthButton() {
-  const container = document.querySelector('.header__right');
-  if (!container) return;
-  const existing = container.querySelector('.header__auth-btn');
-  if (existing) existing.remove();
-
-  const btn = document.createElement('div');
-  btn.className = 'header__auth-btn';
+  var btn = document.getElementById('headerLoginBtn');
+  if (!btn) return;
 
   if (isAuthenticated()) {
-    const profile = getProfile();
-    btn.innerHTML = `<a href="profile.html" class="btn btn--outline" style="font-size:0.78rem;padding:6px 12px;"><i class="fas fa-user"></i> ${profile ? profile.user.name.split(' ')[0] : 'Кабинет'}</a>`;
+    var profile = getProfile();
+    var displayName = profile ? profile.name.split(' ')[0] : 'Кабинет';
+    btn.outerHTML = '<a href="profile.html" class="btn btn--primary header__login-btn" id="headerLoginBtn" style="font-size:0.78rem;padding:7px 14px;white-space:nowrap;"><i class="fas fa-user"></i> ' + displayName + '</a>';
   } else {
-    btn.innerHTML = `<button class="btn btn--outline" onclick="showLoginModal()" style="font-size:0.78rem;padding:6px 12px;"><i class="fas fa-sign-in-alt"></i> Войти</button>`;
+    btn.outerHTML = '<a href="#" class="btn btn--primary header__login-btn" id="headerLoginBtn" onclick="showLoginModal();return false;" style="font-size:0.78rem;padding:7px 14px;white-space:nowrap;"><i class="fas fa-sign-in-alt"></i> Войти</a>';
   }
+}
 
-  const searchToggle = container.querySelector('.header__search-toggle');
-  if (searchToggle) {
-    container.insertBefore(btn, searchToggle);
-  } else {
-    container.appendChild(btn);
-  }
+// ===== Notifications =====
+function getNotifications(login) {
+  var key = 'zhks_notif_' + login;
+  try {
+    var saved = localStorage.getItem(key);
+    return saved ? JSON.parse(saved) : [];
+  } catch(e) { return []; }
+}
+
+function saveNotifications(login, notifs) {
+  try {
+    localStorage.setItem('zhks_notif_' + login, JSON.stringify(notifs));
+  } catch(e) {}
+}
+
+function addNotification(login, text, type, link) {
+  var notifs = getNotifications(login);
+  notifs.unshift({ id: Date.now(), text: text, type: type || 'info', link: link || '', date: new Date().toLocaleDateString('ru-RU'), read: false });
+  saveNotifications(login, notifs);
+}
+
+function checkMeterReminders(profile, prop) {
+  if (!profile || !prop) return;
+  var reminders = JSON.parse(localStorage.getItem('zhks_meter_reminded_' + profile.login) || '{}');
+  var now = new Date();
+  var meters = prop.meters || {};
+  ['coldWater','hotWater','electricity'].forEach(function(type) {
+    var m = meters[type];
+    if (!m || !m.nextCheck) return;
+    var parts = m.nextCheck.split('.');
+    if (parts.length !== 3) return;
+    var checkDate = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+    var diff = (checkDate - now) / (1000 * 60 * 60 * 24);
+    if (diff > 0 && diff <= 31 && !reminders[type]) {
+      addNotification(profile.login, 'Срок поверки счётчика ' + (type === 'coldWater' ? 'ХВС' : type === 'hotWater' ? 'ГВС' : 'электроэнергии') + ' истекает ' + m.nextCheck + '. Пожалуйста, обратитесь в ЖКС.', 'warning', 'profile.html');
+      reminders[type] = true;
+    }
+  });
+  try { localStorage.setItem('zhks_meter_reminded_' + profile.login, JSON.stringify(reminders)); } catch(e) {}
+}
+
+// ===== Email / real send =====
+function sendToEmail(subject, body) {
+  // Mailto fallback for static hosting
+  var mailto = 'mailto:info@zhabg.ru?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+  window.open(mailto, '_blank');
+}
+
+function sendDataToDispatcher(data) {
+  // Static site: save to localStorage log + open mailto as fallback
+  var logKey = 'zhks_dispatcher_log';
+  try {
+    var log = JSON.parse(localStorage.getItem(logKey) || '[]');
+    log.push(data);
+    localStorage.setItem(logKey, JSON.stringify(log));
+  } catch(e) {}
+  // Also send via mailto
+  var subject = data.subject || 'Заявка в ЖКС';
+  var body = (data.name ? 'ФИО: ' + data.name + '\n' : '') + (data.address ? 'Адрес: ' + data.address + '\n' : '') + (data.text ? 'Сообщение: ' + data.text + '\n' : '') + (data.category ? 'Категория: ' + data.category + '\n' : '') + (data.photo ? '\n[Фото прикреплено в заявке]' : '');
+  sendToEmail(subject, body);
 }
 
 // ===== Inject UI elements =====

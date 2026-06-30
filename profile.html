@@ -56,6 +56,7 @@
         <button class="btn btn--danger" onclick="showRepairForm()">
           <i class="fas fa-exclamation-triangle"></i> <span class="btn__text">Аварийная заявка</span>
         </button>
+        <a href="#" class="btn btn--primary header__login-btn" id="headerLoginBtn" onclick="showLoginModal();return false;" style="font-size:0.78rem;padding:7px 14px;white-space:nowrap;"><i class="fas fa-sign-in-alt"></i> Войти</a>
         <button class="header__burger" id="burger-toggle" aria-label="Меню">
           <i class="fas fa-bars"></i>
         </button>
@@ -78,7 +79,7 @@
 
   <script src="common.js"></script>
   <script>
-    const MONTHS = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+    var MONTHS = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
 
     function fmtDate(d) {
       return d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear();
@@ -87,234 +88,315 @@
     function fmtNum(n) {
       return n.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
-
-    function createMockProfile(data) {
-      const now = new Date();
-      const payments = [];
-      for (let i = 0; i < 6; i++) {
-        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-        payments.push({
-          period: MONTHS[d.getMonth()] + ' ' + d.getFullYear(),
-          date: fmtDate(d),
-          maintenance: 785.20,
-          repair: 253.80,
-          water: 412.50,
-          heating: 0,
-          electricity: 290.40,
-          total: 1741.90,
-          paid: i === 0 ? null : 1741.90,
-          status: i === 0 ? 'pending' : 'paid'
-        });
+    function getTotalDebt(profile) {
+      var total = 0;
+      var props = getUserProperties(profile.login);
+      for (var i = 0; i < props.length; i++) {
+        if (props[i].balance !== undefined && props[i].balance < 0) total += Math.abs(props[i].balance);
       }
+      return total;
+    }
 
-      return {
-        pin: data.pin,
-        user: {
-          name: data.name || 'Иванов Иван Иванович',
-          phone: data.phone || '+380-222-31-XX',
-          email: data.email || 'ivanov@example.com',
-          address: data.address || 'ул. Кирова, д. 5, кв. 42',
-          districtId: 1
-        },
-        apartment: {
-          area: 54.3,
-          rooms: 2,
-          registered: 3,
-          account: '1234567890'
-        },
-        building: {
-          year: 1990,
-          floors: 9,
-          apartments: 108,
-          senior: 'Петрова Анна Сергеевна',
-          nextCapitalRepair: '2028'
-        },
-        balance: -1847.32,
-        payments: payments,
-        meters: {
-          coldWater: { number: '38721', installed: '15.03.2019', nextCheck: '15.03.2027' },
-          hotWater: { number: '38722', installed: '15.03.2019', nextCheck: '15.03.2027' },
-          electricity: { number: '59341', installed: '20.11.2018', nextCheck: '20.11.2026' }
-        },
-        meterHistory: [
-          { type: 'coldWater', value: 184.5, date: '25.05.2026' },
-          { type: 'hotWater', value: 97.2, date: '25.05.2026' },
-          { type: 'electricity', value: 8452, date: '25.05.2026' },
-          { type: 'coldWater', value: 179.8, date: '25.04.2026' },
-          { type: 'hotWater', value: 92.1, date: '25.04.2026' },
-          { type: 'electricity', value: 8230, date: '25.04.2026' }
-        ],
-        requests: [
-          { id: 1, category: 'Сантехника', desc: 'Течёт смеситель на кухне', status: 'in-progress', date: '20.06.2026', comment: 'Заявка передана мастеру' },
-          { id: 2, category: 'Электрика', desc: 'Не работает розетка в комнате', status: 'done', date: '05.06.2026', comment: 'Неисправность устранена' }
-        ]
-      };
+    function saveActivePropertyData(prop) {
+      var p = getProfile();
+      if (!p) return;
+      var props = getUserProperties(p.login);
+      if (!props) return;
+      var idx = props.findIndex(function(x) { return x.id === prop.id; });
+      if (idx >= 0) props[idx] = prop;
+      saveUserProperties(p.login, props);
     }
 
     document.addEventListener('DOMContentLoaded', async () => {
       try {
-        const data = await loadData();
-        const em = document.getElementById('emergency-phone');
+        var data = await loadData();
+        var em = document.getElementById('emergency-phone');
         if (em) em.textContent = data.emergencyPhone;
       } catch(e) {}
 
-      const app = document.getElementById('app');
-
+      var app = document.getElementById('app');
       if (!isAuthenticated()) {
-        renderRegister(app);
+        renderLoginRequired(app);
       } else {
         renderDashboard(app);
       }
     });
 
-    function renderRegister(container) {
-      container.innerHTML = `
-        <div class="page-header">
-          <div class="container">
-            <h1 class="page-header__title">Регистрация</h1>
-            <p class="page-header__subtitle">Создайте личный кабинет жителя ЖКС Загребенки</p>
-          </div>
-        </div>
-        <section class="page-section">
-          <div class="container" style="max-width:520px;">
-            <form id="reg-form">
-              <div class="form__group">
-                <label class="form__label">ФИО *</label>
-                <input class="form__input" id="reg-name" type="text" required placeholder="Иванов Иван Иванович">
-              </div>
-              <div class="form__group">
-                <label class="form__label">Адрес *</label>
-                <input class="form__input" id="reg-address" type="text" required placeholder="ул. Кирова, д. 5, кв. 42">
-              </div>
-              <div class="form__group">
-                <label class="form__label">Телефон</label>
-                <input class="form__input" id="reg-phone" type="tel" placeholder="+380-222-31-XX">
-              </div>
-              <div class="form__group">
-                <label class="form__label">Email</label>
-                <input class="form__input" id="reg-email" type="email" placeholder="ivanov@example.com">
-              </div>
-              <div class="form__group">
-                <label class="form__label">ПИН-код для входа (4–6 цифр)</label>
-                <input class="form__input" id="reg-pin" type="password" inputmode="numeric" pattern="[0-9]{4,6}" maxlength="6" placeholder="******" autocomplete="off">
-              </div>
-              <button type="submit" class="btn btn--primary form__submit">Создать кабинет</button>
-              <p style="text-align:center;margin-top:16px;font-size:0.82rem;color:var(--color-text-muted);">
-                Уже есть кабинет? <a href="#" onclick="showLoginModal();return false;">Войти</a>
-              </p>
-            </form>
-          </div>
-        </section>
-      `;
+    function recalcBalance(prop) {
+      var pending = 0;
+      if (prop.payments) {
+        for (var i = 0; i < prop.payments.length; i++) {
+          if (prop.payments[i].status === 'pending') pending += prop.payments[i].total;
+        }
+      }
+      prop.balance = -pending;
+    }
 
-      const form = document.getElementById('reg-form');
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const pin = document.getElementById('reg-pin').value || '0000';
-        const profile = createMockProfile({
-          name: document.getElementById('reg-name').value,
-          address: document.getElementById('reg-address').value,
-          phone: document.getElementById('reg-phone').value,
-          email: document.getElementById('reg-email').value,
-          pin: pin
-        });
-        saveProfile(profile);
-        renderDashboard(container);
-      });
+    function syncPayments(prop) {
+      if (!prop.payments) prop.payments = [];
+      var now = new Date();
+      var curPeriod = MONTHS[now.getMonth()] + ' ' + now.getFullYear();
+
+      // find if current period already has a pending payment
+      var hasPendingCurrent = false;
+      var hasAnyPending = false;
+      for (var i = 0; i < prop.payments.length; i++) {
+        if (prop.payments[i].status === 'pending') hasAnyPending = true;
+        if (prop.payments[i].period === curPeriod && prop.payments[i].status === 'pending') hasPendingCurrent = true;
+      }
+
+      // if no pending at all, or current month is paid — add a new pending month
+      if (!hasAnyPending || !hasPendingCurrent) {
+        // check if current month entry exists but is paid
+        var curExistsPaid = false;
+        for (var j = 0; j < prop.payments.length; j++) {
+          if (prop.payments[j].period === curPeriod && prop.payments[j].status === 'paid') curExistsPaid = true;
+        }
+
+        // determine amount
+        var amt = 290.32;
+        if (prop.payments.length > 0) {
+          var last = prop.payments[prop.payments.length - 1];
+          amt = Math.round(last.total * 100) / 100;
+        }
+
+        if (!hasAnyPending) {
+          // all paid — add current month as pending
+          prop.payments.push({
+            period: curPeriod,
+            date: ('0' + now.getDate()).slice(-2) + '.' + ('0' + (now.getMonth()+1)).slice(-2) + '.' + now.getFullYear(),
+            maintenance: Math.round(amt * 0.45 * 100) / 100,
+            repair: Math.round(amt * 0.15 * 100) / 100,
+            water: Math.round(amt * 0.24 * 100) / 100,
+            heating: 0,
+            electricity: Math.round(amt * 0.16 * 100) / 100,
+            total: amt,
+            paid: null,
+            status: 'pending'
+          });
+        } else if (curExistsPaid && !hasPendingCurrent) {
+          // current month is paid, but no other pending — add next month
+          var nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+          var nextPeriod = MONTHS[nextMonth.getMonth()] + ' ' + nextMonth.getFullYear();
+          prop.payments.push({
+            period: nextPeriod,
+            date: ('0' + nextMonth.getDate()).slice(-2) + '.' + ('0' + (nextMonth.getMonth()+1)).slice(-2) + '.' + nextMonth.getFullYear(),
+            maintenance: Math.round(amt * 0.45 * 100) / 100,
+            repair: Math.round(amt * 0.15 * 100) / 100,
+            water: Math.round(amt * 0.24 * 100) / 100,
+            heating: 0,
+            electricity: Math.round(amt * 0.16 * 100) / 100,
+            total: amt,
+            paid: null,
+            status: 'pending'
+          });
+        }
+        saveActivePropertyData(prop);
+      }
+    }
+
+    function renderLoginRequired(container) {
+      container.innerHTML = '\
+        <div class="page-header">\
+          <div class="container">\
+            <h1 class="page-header__title">Личный кабинет</h1>\
+            <p class="page-header__subtitle">Доступно только авторизованным жителям</p>\
+          </div>\
+        </div>\
+        <section class="page-section">\
+          <div class="container" style="text-align:center;padding:60px 20px;">\
+            <i class="fas fa-user-lock" style="font-size:48px;color:var(--color-text-muted);margin-bottom:16px;"></i>\
+            <h3 style="font-family:var(--font-heading);font-weight:600;color:var(--color-primary);margin-bottom:12px;">Войдите в кабинет</h3>\
+            <p style="font-size:0.85rem;color:var(--color-text-muted);margin-bottom:24px;">Для просмотра платежей, заявок и показаний счётчиков необходимо авторизоваться.</p>\
+            <button class="btn btn--primary" onclick="showLoginModal()"><i class="fas fa-sign-in-alt"></i> Войти</button>\
+          </div>\
+        </section>\
+      ';
     }
 
     function renderDashboard(container) {
-      const profile = getProfile();
+      var profile = getProfile();
       if (!profile) { window.location.href = 'index.html'; return; }
 
-      const { user, balance, payments, meters, meterHistory, requests, apartment, building } = profile;
+      var prop = getActiveProperty(profile);
+      if (!prop) { window.location.href = 'index.html'; return; }
 
-      container.innerHTML = `
-        <div class="page-header">
-          <div class="container">
-            <h1 class="page-header__title">Личный кабинет</h1>
-            <p class="page-header__subtitle">${user.name} — ${user.address}</p>
-          </div>
-        </div>
-        <section class="page-section">
-          <div class="container">
-            <div class="profile-welcome">
-              Здравствуйте, <strong>${user.name.split(' ')[0]}</strong>! Добро пожаловать в личный кабинет.
-              Здесь вы можете оплатить счета, передать показания счётчиков, подать заявку в диспетчерскую и многое другое.
-            </div>
+      var props = getUserProperties(profile.login) || [];
 
-            <div class="profile-balance">
-              <div>
-                <div class="profile-balance__label">Баланс лицевого счёта</div>
-                <div class="profile-balance__amount ${balance < 0 ? 'profile-balance__amount--negative' : 'profile-balance__amount--positive'}">
-                  ${balance < 0 ? '' : '+'}${fmtNum(balance)} ZD
-                </div>
-              </div>
-              <div class="profile-balance__actions">
-                <button class="btn btn--primary" onclick="showPaymentModal()"><i class="fas fa-credit-card"></i> Оплатить</button>
-                <button class="btn btn--ghost" onclick="downloadReceipt({id:'receipt_'+Date.now(), period: (payments&&payments.length>0?payments[0].period:'—'), total: Math.abs(balance), paid: Math.abs(balance), maintenance: 785.20, repair: 253.80, water: 412.50, heating: 0, electricity: 290.40, date: new Date().toLocaleDateString('ru-RU')})"><i class="fas fa-download"></i> Квитанция</button>
-              </div>
-            </div>
+      // Sync payments — add new month if needed
+      syncPayments(prop);
 
-            <div class="profile-tabs" id="profile-tabs">
-              <button class="profile-tab profile-tab--active" data-tab="payments"><i class="fas fa-credit-card"></i> Платежи</button>
-              <button class="profile-tab" data-tab="meters"><i class="fas fa-tachometer-alt"></i> Показания</button>
-              <button class="profile-tab" data-tab="requests"><i class="fas fa-tools"></i> Заявки</button>
-              <button class="profile-tab" data-tab="apartment"><i class="fas fa-home"></i> Квартира</button>
-              <button class="profile-tab" data-tab="settings"><i class="fas fa-cog"></i> Настройки</button>
-            </div>
+      // Recalculate balance from pending payments
+      recalcBalance(prop);
 
-            <div id="profile-tab-payments" class="profile-tab-content profile-tab-content--active"></div>
-            <div id="profile-tab-meters" class="profile-tab-content"></div>
-            <div id="profile-tab-requests" class="profile-tab-content"></div>
-            <div id="profile-tab-apartment" class="profile-tab-content"></div>
-            <div id="profile-tab-settings" class="profile-tab-content"></div>
-          </div>
-        </section>
-      `;
+      // Check meter reminders
+      checkMeterReminders(profile, prop);
 
-      // Tabs
-      document.querySelectorAll('.profile-tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-          document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('profile-tab--active'));
-          document.querySelectorAll('.profile-tab-content').forEach(c => c.classList.remove('profile-tab-content--active'));
+      var notifs = getNotifications(profile.login);
+      var unread = notifs.filter(function(n) { return !n.read; }).length;
+
+      container.innerHTML = '\
+        <div class="page-header">\
+          <div class="container">\
+            <div style="display:flex;align-items:center;gap:12px;">\
+              <h1 class="page-header__title" style="margin:0;">Личный кабинет</h1>\
+              <div class="notif-bell" onclick="toggleNotifPanel()" style="position:relative;cursor:pointer;font-size:1.2rem;color:var(--color-accent);">\
+                <i class="fas fa-bell"></i>\
+                ' + (unread > 0 ? '<span class="notif-badge">' + unread + '</span>' : '') + '\
+              </div>\
+            </div>\
+            <p class="page-header__subtitle">' + profile.name + '</p>\
+          </div>\
+        </div>\
+        <section class="page-section">\
+          <div class="container">\
+            <div class="property-switcher">\
+              <span class="property-switcher__label"><i class="fas fa-map-marker-alt"></i> Объект:</span>\
+              <select class="property-switcher__select" id="propertySelect" onchange="switchProperty(this.value)">\
+                ' + props.map(function(p) {
+                  var dName = p.districtId ? getDistrictName(p.districtId) : '';
+                  return '<option value="' + p.id + '"' + (p.id === prop.id ? ' selected' : '') + '>' + p.nickname + ' — ' + (dName ? '[' + dName + '] ' : '') + p.address + '</option>';
+                }).join('') + '\
+              </select>\
+            </div>\
+            <div id="notifPanel" class="notif-panel" style="display:none;"></div>\
+            <div class="profile-welcome">\
+              Здравствуйте, <strong>' + profile.name.split(' ')[0] + '</strong>! Добро пожаловать в личный кабинет.\
+              Здесь вы можете оплатить счета, передать показания счётчиков, подать заявку в диспетчерскую и многое другое.\
+            </div>\
+            <div class="profile-balance">\
+              <div>\
+                <div class="profile-balance__label">Баланс — ' + prop.nickname + '</div>\
+                ' + (prop.balance < 0 ? '\
+                <div class="profile-balance__amount profile-balance__amount--negative">' + fmtNum(Math.abs(prop.balance)) + ' ZD</div>\
+                ' : '\
+                <div class="profile-balance__amount profile-balance__amount--positive">Задолженности нет</div>\
+                ') + '\
+                <div class="profile-balance__total" style="font-size:0.75rem;color:var(--color-text-muted);margin-top:4px;">\
+                  Всего по всем объектам: ' + fmtNum(getTotalDebt(profile)) + ' ZD</div>\
+                <div class="profile-balance__paydate" style="font-size:0.8rem;color:var(--color-text-muted);margin-top:8px;">\
+                  Последний платёж: ' + (profile.lastPaymentDate || '—') + '\
+                </div>\
+              </div>\
+              <div class="profile-balance__actions">\
+                <button class="btn btn--primary" onclick="showPaymentModal()"><i class="fas fa-credit-card"></i> Оплатить</button>\
+                <button class="btn btn--ghost" onclick="downloadReceipt()"><i class="fas fa-download"></i> Квитанция</button>\
+                <button class="btn btn--ghost" onclick="generateNoDebtCertificate()" ' + (prop.balance < 0 ? 'disabled' : '') + '><i class="fas fa-file-invoice"></i> Справка</button>\
+              </div>\
+            </div>\
+            <div class="profile-tabs" id="profile-tabs">\
+              <button class="profile-tab profile-tab--active" data-tab="payments"><i class="fas fa-credit-card"></i> Платежи</button>\
+              <button class="profile-tab" data-tab="meters"><i class="fas fa-tachometer-alt"></i> Показания</button>\
+              <button class="profile-tab" data-tab="requests"><i class="fas fa-tools"></i> Заявки</button>\
+              <button class="profile-tab" data-tab="outages"><i class="fas fa-bolt"></i> Отключения</button>\
+              <button class="profile-tab" data-tab="calendar"><i class="fas fa-calendar-alt"></i> События</button>\
+              <button class="profile-tab" data-tab="docs"><i class="fas fa-file-alt"></i> Документы</button>\
+              <button class="profile-tab" data-tab="support"><i class="fas fa-headset"></i> Чат</button>\
+              <button class="profile-tab" data-tab="apartment"><i class="fas fa-home"></i> ' + (prop.apartment.rooms > 0 ? 'Квартира' : 'Объект') + '</button>\
+              <button class="profile-tab" data-tab="settings"><i class="fas fa-cog"></i> Настройки</button>\
+            </div>\
+            <div id="profile-tab-payments" class="profile-tab-content profile-tab-content--active"></div>\
+            <div id="profile-tab-meters" class="profile-tab-content"></div>\
+            <div id="profile-tab-requests" class="profile-tab-content"></div>\
+            <div id="profile-tab-outages" class="profile-tab-content"></div>\
+            <div id="profile-tab-calendar" class="profile-tab-content"></div>\
+            <div id="profile-tab-docs" class="profile-tab-content"></div>\
+            <div id="profile-tab-support" class="profile-tab-content"></div>\
+            <div id="profile-tab-apartment" class="profile-tab-content"></div>\
+            <div id="profile-tab-settings" class="profile-tab-content"></div>\
+          </div>\
+        </section>\
+      ';
+
+      document.querySelectorAll('.profile-tab').forEach(function(tab) {
+        tab.addEventListener('click', function() {
+          document.querySelectorAll('.profile-tab').forEach(function(t) { t.classList.remove('profile-tab--active'); });
+          document.querySelectorAll('.profile-tab-content').forEach(function(c) { c.classList.remove('profile-tab-content--active'); });
           tab.classList.add('profile-tab--active');
           document.getElementById('profile-tab-' + tab.dataset.tab).classList.add('profile-tab-content--active');
         });
       });
 
-      // Render tabs
-      renderPayments(profile);
-      renderMeters(profile);
-      renderRequests(profile);
-      renderApartment(profile);
-      renderSettings(profile);
+      renderPayments(prop);
+      renderMeters(prop);
+      renderRequests(prop);
+      renderOutages(prop, profile);
+      renderCalendar(prop, profile);
+      renderDocs(prop);
+      renderSupport(prop, profile);
+      renderApartment(prop);
+      renderSettings(profile, prop);
+    }
+
+    // mark first pending payment as paid
+    function processPayment() {
+      var p = getProfile();
+      if (!p) return;
+      var prop = getActiveProperty(p);
+      if (!prop) return;
+      for (var i = 0; i < prop.payments.length; i++) {
+        if (prop.payments[i].status === 'pending') {
+          prop.payments[i].status = 'paid';
+          prop.payments[i].paid = prop.payments[i].total;
+          break;
+        }
+      }
+      p.lastPaymentDate = new Date().toLocaleDateString('ru-RU');
+      saveProfile(p);
+      recalcBalance(prop);
+      saveActivePropertyData(prop);
+      addNotification(p.login, 'Оплата прошла успешно.', 'info', 'profile.html');
+      var mo = document.querySelector('.modal-overlay.active');
+      if (mo) mo.remove();
+      renderPayments(prop);
+      // re-render balance display
+      var balLabel = document.querySelector('.profile-balance__amount');
+      if (balLabel) {
+        if (prop.balance < 0) {
+          balLabel.className = 'profile-balance__amount profile-balance__amount--negative';
+          balLabel.textContent = fmtNum(Math.abs(prop.balance)) + ' ZD';
+        } else {
+          balLabel.className = 'profile-balance__amount profile-balance__amount--positive';
+          balLabel.textContent = 'Задолженности нет';
+        }
+      }
+      var totalEl = document.querySelector('.profile-balance__total');
+      if (totalEl) totalEl.textContent = 'Всего по всем объектам: ' + fmtNum(getTotalDebt(p)) + ' ZD';
+      var payDateEl = document.querySelector('.profile-balance__paydate');
+      if (payDateEl) payDateEl.textContent = 'Последний платёж: ' + (p.lastPaymentDate || '—');
+      // update certificate button state
+      var certBtns = document.querySelectorAll('.profile-balance__actions .btn--ghost');
+      certBtns.forEach(function(b) { if (b.textContent.trim() === 'Справка') b.disabled = prop.balance < 0; });
     }
 
     function showPaymentModal() {
-      const p = getProfile();
+      var p = getProfile();
       if (!p) return;
-      const amount = Math.ceil(Math.abs(p.balance));
-      const purpose = encodeURIComponent('Оплата ЖКУ — ' + p.user.address);
-      const id = Date.now().toString(36).toUpperCase();
-      const atbUrl = 'https://doinwor.github.io/fp-bank-site/pay.html?amount=' + amount + '&purpose=' + purpose + '&id=' + id;
-      const fpiUrl = 'fpi-pay.html?amount=' + amount + '&purpose=' + purpose + '&id=' + id;
+      var prop = getActiveProperty(p);
+      if (!prop) return;
+      var amount = Math.ceil(Math.abs(prop.balance));
+      var purpose = encodeURIComponent('Оплата ЖКУ — ' + prop.address);
+      var id = Date.now().toString(36).toUpperCase();
+      var atbUrl = 'https://doinwor.github.io/fp-bank-site/pay.html?amount=' + amount + '&purpose=' + purpose + '&id=' + id;
+      var fpiUrl = 'fpi-pay.html?amount=' + amount + '&purpose=' + purpose + '&id=' + id;
+
       const html = `
         <div style="max-width:460px;">
           <p style="font-size:0.9rem;color:var(--color-text-secondary);margin-bottom:20px;">
-            Текущая задолженность: <strong style="color:var(--color-danger);">${fmtNum(Math.abs(p.balance))} ZD</strong>
+            Текущая задолженность: <strong style="color:var(--color-danger);">${fmtNum(Math.abs(prop.balance))} ZD</strong>
+            ${p.lastPaymentDate ? '<br><span style="font-size:0.78rem;color:var(--color-text-muted);">Последний платёж: ' + p.lastPaymentDate + '</span>' : ''}
           </p>
           <p style="font-size:0.82rem;color:var(--color-text-muted);margin-bottom:16px;">Выберите способ оплаты:</p>
 
           <div style="display:grid;gap:12px;margin-bottom:24px;">
-            <div onclick="window.open('${atbUrl}', '_blank')" style="display:flex;align-items:center;gap:16px;padding:16px 20px;border:1px solid var(--color-border);border-radius:var(--radius);cursor:pointer;transition:border-color var(--transition);" onmouseover="this.style.borderColor='var(--color-accent)'" onmouseout="this.style.borderColor=''">
+            <div onclick="processPayment();window.open('${atbUrl}', '_blank')" style="display:flex;align-items:center;gap:16px;padding:16px 20px;border:1px solid var(--color-border);border-radius:var(--radius);cursor:pointer;transition:border-color var(--transition);" onmouseover="this.style.borderColor='var(--color-accent)'" onmouseout="this.style.borderColor=''">
               <div style="width:64px;height:40px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                 <img src="atb.png" alt="АТБ Банк" style="max-width:64px;max-height:36px;object-fit:contain;">
               </div>
               <div><div style="font-weight:600;font-size:0.88rem;color:var(--color-text);">АТБ Банк</div><div style="font-size:0.78rem;color:var(--color-text-muted);">Акционерный Торговый Банк (внешний сервис)</div></div>
               <i class="fas fa-chevron-right" style="margin-left:auto;color:var(--color-text-muted);"></i>
             </div>
-            <div onclick="window.open('${fpiUrl}', '_blank')" style="display:flex;align-items:center;gap:16px;padding:16px 20px;border:1px solid var(--color-border);border-radius:var(--radius);cursor:pointer;transition:border-color var(--transition);" onmouseover="this.style.borderColor='var(--color-accent)'" onmouseout="this.style.borderColor=''">
+            <div onclick="processPayment();window.open('${fpiUrl}', '_blank')" style="display:flex;align-items:center;gap:16px;padding:16px 20px;border:1px solid var(--color-border);border-radius:var(--radius);cursor:pointer;transition:border-color var(--transition);" onmouseover="this.style.borderColor='var(--color-accent)'" onmouseout="this.style.borderColor=''">
               <div style="width:64px;height:40px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                 <img src="fpi-pay.png" alt="ФПИ PAY" style="max-width:64px;max-height:36px;object-fit:contain;">
               </div>
@@ -331,134 +413,329 @@
       openModal(html, 'Оплата задолженности');
     }
 
-    function renderPayments(profile) {
-      const el = document.getElementById('profile-tab-payments');
-      const rows = profile.payments.map(p => `
-        <tr>
-          <td>${p.period}</td>
-          <td style="text-align:right;">${fmtNum(p.maintenance)}</td>
-          <td style="text-align:right;">${fmtNum(p.repair)}</td>
-          <td style="text-align:right;">${fmtNum(p.water)}</td>
-          <td style="text-align:right;">${p.heating ? fmtNum(p.heating) : '—'}</td>
-          <td style="text-align:right;">${fmtNum(p.electricity)}</td>
-          <td style="text-align:right;"><span class="amount amount--${p.status === 'paid' ? 'positive' : 'negative'}">${fmtNum(p.total)}</span></td>
-          <td><span class="profile-status profile-status--${p.status === 'paid' ? 'paid' : 'pending'}">${p.status === 'paid' ? 'Оплачено' : 'Ожидает'}</span></td>
-        </tr>
-      `).join('');
+    // ========== КВИТАНЦИЯ HTML (как настоящая) ==========
+    function downloadReceipt() {
+      var profile = getProfile();
+      if (!profile) return;
+      var prop = getActiveProperty(profile);
+      if (!prop) return;
+      var payment = (prop.payments && prop.payments.length > 0) ? prop.payments[0] : null;
+      var period = payment ? payment.period : new Date().toLocaleDateString('ru-RU');
+      var now = new Date();
+      var dateStr = ('0' + now.getDate()).slice(-2) + '.' + ('0' + (now.getMonth()+1)).slice(-2) + '.' + now.getFullYear();
 
-      el.innerHTML = `
-        <p style="font-size:0.85rem;color:var(--color-text-muted);margin-bottom:16px;">История начислений и оплат</p>
-        <div style="overflow-x:auto;">
-          <table class="profile-table">
-            <thead>
-              <tr>
-                <th>Период</th>
-                <th style="text-align:right;">Содерж.</th>
-                <th style="text-align:right;">Ремонт</th>
-                <th style="text-align:right;">Вода</th>
-                <th style="text-align:right;">Отопл.</th>
-                <th style="text-align:right;">Эл-во</th>
-                <th style="text-align:right;">Итого</th>
-                <th>Статус</th>
-              </tr>
-            </thead>
-            <tbody>${rows}</tbody>
-          </table>
-        </div>
-      `;
+      var items = payment ? [
+        ['Содержание жилья', payment.maintenance],
+        ['Текущий ремонт', payment.repair],
+        ['Холодное водоснабжение', payment.water],
+        ['Отопление', payment.heating || 0],
+        ['Электроэнергия', payment.electricity]
+      ] : [];
+
+      var rows = items.map(function(item) {
+        return '<tr><td style="padding:8px 10px;border-bottom:1px solid #e0e0e0;">' + item[0] + '</td><td style="padding:8px 10px;border-bottom:1px solid #e0e0e0;text-align:right;">' + item[1].toFixed(2) + '</td></tr>';
+      }).join('');
+
+      var total = payment ? payment.total : 0;
+      var statusText = payment && payment.status === 'paid' ? 'Оплачено' : 'Ожидает оплаты';
+      var statusColor = payment && payment.status === 'paid' ? '#28a745' : '#e67e22';
+
+      var w = window.open('', '_blank');
+      w.document.write('<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><title>Квитанция — ЖКС Загребенки</title>');
+      w.document.write('<style>');
+      w.document.write('@page { margin: 0; }');
+      w.document.write('* { margin: 0; padding: 0; box-sizing: border-box; }');
+      w.document.write('body { font-family: "Inter", "Segoe UI", Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 30px 15px; }');
+      w.document.write('.receipt { max-width: 700px; width: 100%; background: #fff; border-radius: 12px; box-shadow: 0 8px 40px rgba(0,0,0,0.08); overflow: hidden; }');
+      w.document.write('.receipt-header { background: linear-gradient(135deg, #1A3B5C 0%, #0F2B45 100%); color: #fff; padding: 32px 36px 24px; }');
+      w.document.write('.receipt-header h1 { font-size: 20px; font-weight: 700; letter-spacing: 0.5px; font-family: "Unbounded", sans-serif; }');
+      w.document.write('.receipt-header p { font-size: 13px; opacity: 0.85; margin-top: 6px; }');
+      w.document.write('.receipt-badge { display: inline-block; background: rgba(255,255,255,0.15); border-radius: 20px; padding: 4px 14px; font-size: 11px; margin-top: 10px; }');
+      w.document.write('.receipt-body { padding: 28px 36px 32px; }');
+      w.document.write('.receipt-info { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }');
+      w.document.write('.receipt-info__item label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 3px; }');
+      w.document.write('.receipt-info__item span { font-size: 14px; color: #1e1e1e; font-weight: 600; }');
+      w.document.write('.receipt-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }');
+      w.document.write('.receipt-table thead th { background: #f7f9fc; padding: 10px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #555; text-align: left; border-bottom: 2px solid #e0e0e0; }');
+      w.document.write('.receipt-table thead th:last-child { text-align: right; }');
+      w.document.write('.receipt-total { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-top: 2px solid #1A3B5C; margin-top: 8px; }');
+      w.document.write('.receipt-total__label { font-size: 16px; font-weight: 700; color: #1A3B5C; }');
+      w.document.write('.receipt-total__amount { font-size: 24px; font-weight: 800; color: #1A3B5C; }');
+      w.document.write('.receipt-status { display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-top: 12px; }');
+      w.document.write('.receipt-footer { border-top: 1px dashed #ddd; padding: 20px 36px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #999; }');
+      w.document.write('.receipt-print-btn { background: #2B7BEE; color: #fff; border: none; padding: 10px 28px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; }');
+      w.document.write('.receipt-print-btn:hover { background: #1a6ad9; }');
+      w.document.write('@media print { body { background: #fff; padding: 0; } .receipt { box-shadow: none; border-radius: 0; } .receipt-print-btn { display: none; } }');
+      w.document.write('</style></head><body>');
+
+      w.document.write('<div class="receipt">');
+      w.document.write('<div class="receipt-header">');
+      w.document.write('<h1>ЖКС Загребенки</h1>');
+      w.document.write('<p>Квитанция на оплату жилищно-коммунальных услуг</p>');
+      w.document.write('<div class="receipt-badge">' + period + '</div>');
+      w.document.write('</div>');
+
+      w.document.write('<div class="receipt-body">');
+      w.document.write('<div class="receipt-info">');
+      w.document.write('<div class="receipt-info__item"><label>Плательщик</label><span>' + profile.name + '</span></div>');
+      w.document.write('<div class="receipt-info__item"><label>Дата квитанции</label><span>' + dateStr + '</span></div>');
+      w.document.write('<div class="receipt-info__item"><label>Адрес</label><span>' + prop.address + '</span></div>');
+      w.document.write('<div class="receipt-info__item"><label>Лицевой счёт</label><span>' + (prop.apartment ? prop.apartment.account : '—') + '</span></div>');
+      w.document.write('<div class="receipt-info__item" style="grid-column:1/3;"><label>Объект</label><span>' + prop.nickname + ' (' + (prop.apartment && prop.apartment.area ? prop.apartment.area + ' м²' : '') + ', ' + (prop.apartment && prop.apartment.rooms ? prop.apartment.rooms + ' комн.' : '') + ')</span></div>');
+      w.document.write('</div>');
+
+      w.document.write('<table class="receipt-table"><thead><tr><th>Услуга</th><th style="text-align:right;">Сумма (ZD)</th></tr></thead><tbody>');
+      w.document.write(rows);
+      w.document.write('</tbody></table>');
+
+      w.document.write('<div class="receipt-total"><span class="receipt-total__label">ИТОГО к оплате</span><span class="receipt-total__amount">' + total.toFixed(2) + ' ZD</span></div>');
+      w.document.write('<div class="receipt-status" style="background:' + (payment && payment.status === 'paid' ? '#e8f5e9' : '#fff8e1') + ';color:' + statusColor + ';">');
+      w.document.write('<span>' + (payment && payment.status === 'paid' ? '&#10003;' : '&#9888;') + '</span> ' + statusText);
+      w.document.write('</div>');
+      w.document.write('</div>');
+
+      w.document.write('<div class="receipt-footer">');
+      w.document.write('<span>&copy; ' + now.getFullYear() + ' ЖКС Загребенки</span>');
+      w.document.write('<button class="receipt-print-btn" onclick="window.print()"><i class="fas fa-print"></i> Распечатать</button>');
+      w.document.write('</div>');
+
+      w.document.write('</div>');
+      w.document.write('</body></html>');
+      w.document.close();
     }
 
-    function renderMeters(profile) {
-      const el = document.getElementById('profile-tab-meters');
-      const { meters, meterHistory } = profile;
+    // ========== СПРАВКА ОБ ОТСУТСТВИИ ЗАДОЛЖЕННОСТИ (HTML) ==========
+    function generateNoDebtCertificate() {
+      var profile = getProfile();
+      if (!profile) return;
+      var prop = getActiveProperty(profile);
+      if (!prop) return;
+      if (prop.balance < 0) { alert('Невозможно получить справку: имеется задолженность.'); return; }
+      var now = new Date();
+      var dateStr = ('0' + now.getDate()).slice(-2) + '.' + ('0' + (now.getMonth()+1)).slice(-2) + '.' + now.getFullYear();
 
-      const historyRows = meterHistory.slice().reverse().map(m => `
-        <tr>
-          <td>${m.date}</td>
-          <td>${m.type === 'coldWater' ? 'ХВС' : m.type === 'hotWater' ? 'ГВС' : 'Эл-во'}</td>
-          <td style="text-align:right;">${fmtNum(m.value)}</td>
-        </tr>
-      `).join('');
+      var w = window.open('', '_blank');
+      w.document.write('<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><title>Справка — ЖКС Загребенки</title>');
+      w.document.write('<style>');
+      w.document.write('@page { margin: 0; }');
+      w.document.write('* { margin: 0; padding: 0; box-sizing: border-box; }');
+      w.document.write('body { font-family: "Inter", "Segoe UI", Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 30px 15px; }');
+      w.document.write('.cert { max-width: 700px; width: 100%; background: #fff; border-radius: 12px; box-shadow: 0 8px 40px rgba(0,0,0,0.08); overflow: hidden; }');
+      w.document.write('.cert-header { background: linear-gradient(135deg, #1A3B5C 0%, #0F2B45 100%); color: #fff; padding: 32px 36px 24px; text-align: center; }');
+      w.document.write('.cert-header h1 { font-size: 20px; font-weight: 700; font-family: "Unbounded", sans-serif; }');
+      w.document.write('.cert-header p { font-size: 14px; opacity: 0.85; margin-top: 8px; }');
+      w.document.write('.cert-body { padding: 36px; }');
+      w.document.write('.cert-number { text-align: right; font-size: 12px; color: #999; margin-bottom: 30px; }');
+      w.document.write('.cert-text { font-size: 14px; line-height: 1.8; color: #1e1e1e; }');
+      w.document.write('.cert-text p { margin-bottom: 12px; }');
+      w.document.write('.cert-stamp { margin-top: 40px; display: flex; justify-content: space-between; align-items: end; }');
+      w.document.write('.cert-stamp div { font-size: 13px; color: #555; }');
+      w.document.write('.cert-stamp__seal { width: 100px; height: 100px; border: 3px solid #1A3B5C; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #1A3B5C; text-align: center; line-height: 1.3; font-weight: 600; padding: 8px; }');
+      w.document.write('.cert-footer { border-top: 1px dashed #ddd; padding: 20px 36px; text-align: center; font-size: 11px; color: #999; }');
+      w.document.write('.cert-print-btn { background: #2B7BEE; color: #fff; border: none; padding: 10px 28px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-top: 20px; }');
+      w.document.write('.cert-print-btn:hover { background: #1a6ad9; }');
+      w.document.write('@media print { body { background: #fff; padding: 0; } .cert { box-shadow: none; border-radius: 0; } .cert-print-btn { display: none; } }');
+      w.document.write('</style></head><body>');
 
-      el.innerHTML = `
-        <div class="profile-meters">
-          <div class="profile-meters__form">
-            <h4>Передать показания</h4>
-            <form id="meter-form">
-              <div class="form__group">
-                <label class="form__label">Холодная вода, м³</label>
-                <input class="form__input" id="meter-cw" type="number" step="0.01" required>
-              </div>
-              <div class="form__group">
-                <label class="form__label">Горячая вода, м³</label>
-                <input class="form__input" id="meter-hw" type="number" step="0.01" required>
-              </div>
-              <div class="form__group">
-                <label class="form__label">Электричество, кВт·ч</label>
-                <input class="form__input" id="meter-el" type="number" step="0.01" required>
-              </div>
-              <button type="submit" class="btn btn--primary form__submit">Отправить</button>
-            </form>
-            <div class="form__success" id="meter-success" style="margin-top:16px;">
-              <i class="fas fa-check-circle"></i>
-              <h4 style="font-family:var(--font-heading);color:var(--color-primary);margin:8px 0 4px;">Показания отправлены</h4>
-              <p>Спасибо! Ваши показания приняты.</p>
-            </div>
-          </div>
-          <div style="margin-top:24px;">
-            <h4 style="font-family:var(--font-heading);font-weight:600;font-size:0.9rem;color:var(--color-primary);margin-bottom:12px;">Расход за последние месяцы</h4>
-            <div id="meterChart"></div>
-          </div>
-          <div>
-            <h4 style="font-family:var(--font-heading);font-weight:600;font-size:0.9rem;color:var(--color-primary);margin-bottom:16px;">Информация о счётчиках</h4>
-            <div class="profile-meters__info">
-              <strong>ХВС:</strong> № ${meters.coldWater.number}, уст. ${meters.coldWater.installed}<br>
-              <strong>ГВС:</strong> № ${meters.hotWater.number}, уст. ${meters.hotWater.installed}<br>
-              <strong>Эл-во:</strong> № ${meters.electricity.number}, уст. ${meters.electricity.installed}<br>
-              <br>Следующая поверка: ХВС — ${meters.coldWater.nextCheck}, ГВС — ${meters.hotWater.nextCheck}, Эл-во — ${meters.electricity.nextCheck}
-            </div>
+      w.document.write('<div class="cert">');
+      w.document.write('<div class="cert-header">');
+      w.document.write('<h1>ЖКС Загребенки</h1>');
+      w.document.write('<p>СПРАВКА об отсутствии задолженности</p>');
+      w.document.write('</div>');
+      w.document.write('<div class="cert-body">');
+      w.document.write('<div class="cert-number">№ ' + Date.now().toString(36).toUpperCase() + ' от ' + dateStr + '</div>');
+      w.document.write('<div class="cert-text">');
+      w.document.write('<p>Настоящая справка выдана <strong>' + profile.name + '</strong> в том, что по состоянию на <strong>' + dateStr + '</strong> задолженность по оплате жилищно-коммунальных услуг по адресу:</p>');
+      w.document.write('<p style="font-size:16px;font-weight:700;color:#1A3B5C;text-align:center;padding:12px 0;">' + prop.address + '</p>');
+      w.document.write('<p>Лицевой счёт: <strong>' + (prop.apartment ? prop.apartment.account : '—') + '</strong></p>');
+      w.document.write('<p style="color:#28a745;font-weight:700;font-size:16px;">Задолженность: ОТСУТСТВУЕТ</p>');
+      w.document.write('<p style="margin-top:20px;font-size:12px;color:#888;">Справка действительна в течение 30 календарных дней с даты выдачи.</p>');
+      w.document.write('</div>');
+      w.document.write('<div class="cert-stamp">');
+      w.document.write('<div><strong>Главный бухгалтер</strong><br>ЖКС Загребенки<br><br><em>(подпись)</em></div>');
+      w.document.write('<div class="cert-stamp__seal">ЖКС<br>Загребенки<br>Печать</div>');
+      w.document.write('</div>');
+      w.document.write('<div style="text-align:center;"><button class="cert-print-btn" onclick="window.print()"><i class="fas fa-print"></i> Распечатать</button></div>');
+      w.document.write('</div>');
+      w.document.write('<div class="cert-footer">&copy; ' + now.getFullYear() + ' ЖКС Загребенки</div>');
+      w.document.write('</div></body></html>');
+      w.document.close();
+    }
 
-            <h4 style="font-family:var(--font-heading);font-weight:600;font-size:0.9rem;color:var(--color-primary);margin:24px 0 16px;">История показаний</h4>
-            <div style="overflow-x:auto;">
-              <table class="profile-table">
-                <thead>
-                  <tr><th>Дата</th><th>Счётчик</th><th style="text-align:right;">Значение</th></tr>
-                </thead>
-                <tbody>${historyRows}</tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      `;
+    // ========== УВЕДОМЛЕНИЯ ==========
+    function toggleNotifPanel() {
+      var panel = document.getElementById('notifPanel');
+      if (!panel) return;
+      if (panel.style.display !== 'block') {
+        renderNotifPanel();
+        panel.style.display = 'block';
+      } else {
+        panel.style.display = 'none';
+      }
+    }
 
-      const mForm = document.getElementById('meter-form');
-      const mSuccess = document.getElementById('meter-success');
+    function renderNotifPanel() {
+      var panel = document.getElementById('notifPanel');
+      if (!panel) return;
+      var profile = getProfile();
+      if (!profile) { panel.innerHTML = ''; return; }
+      var notifs = getNotifications(profile.login);
+      var html = '<div style="background:white;border:1px solid var(--color-border);border-radius:var(--radius);padding:16px;max-height:300px;overflow-y:auto;box-shadow:0 4px 20px rgba(0,0,0,0.1);">';
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><strong>Уведомления</strong><button onclick="markAllRead()" style="font-size:0.75rem;color:var(--color-accent);background:none;border:none;cursor:pointer;">Прочитать все</button></div>';
+      if (notifs.length === 0) {
+        html += '<p style="font-size:0.82rem;color:var(--color-text-muted);">Нет уведомлений</p>';
+      } else {
+        notifs.forEach(function(n) {
+          html += '<div style="padding:8px 0;border-bottom:1px solid var(--color-border);' + (n.read ? 'opacity:0.6;' : '') + '">';
+          html += '<div style="font-size:0.82rem;">' + (n.type === 'warning' ? '<i class="fas fa-exclamation-triangle" style="color:#e67e22;"></i> ' : '<i class="fas fa-info-circle" style="color:var(--color-accent);"></i> ') + n.text + '</div>';
+          html += '<div style="font-size:0.7rem;color:var(--color-text-muted);margin-top:2px;">' + n.date + '</div>';
+          html += '</div>';
+        });
+      }
+      html += '</div>';
+      panel.innerHTML = html;
+    }
+
+    function markAllRead() {
+      var profile = getProfile();
+      if (!profile) return;
+      var notifs = getNotifications(profile.login);
+      notifs.forEach(function(n) { n.read = true; });
+      saveNotifications(profile.login, notifs);
+      renderNotifPanel();
+    }
+
+    // ========== ПЛАТЕЖИ ==========
+    function renderPayments(prop) {
+      var el = document.getElementById('profile-tab-payments');
+      var payments = prop.payments || [];
+      var rows = payments.map(function(p) {
+        return '\
+          <tr>\
+            <td>' + p.period + '</td>\
+            <td style="text-align:right;">' + fmtNum(p.maintenance) + '</td>\
+            <td style="text-align:right;">' + fmtNum(p.repair) + '</td>\
+            <td style="text-align:right;">' + fmtNum(p.water) + '</td>\
+            <td style="text-align:right;">' + (p.heating ? fmtNum(p.heating) : '—') + '</td>\
+            <td style="text-align:right;">' + fmtNum(p.electricity) + '</td>\
+            <td style="text-align:right;"><span class="amount amount--' + (p.status === 'paid' ? 'positive' : 'negative') + '">' + fmtNum(p.total) + '</span></td>\
+            <td><span class="profile-status profile-status--' + (p.status === 'paid' ? 'paid' : 'pending') + '">' + (p.status === 'paid' ? 'Оплачено' : 'Ожидает') + '</span></td>\
+          </tr>\
+        ';
+      }).join('');
+
+      el.innerHTML = '\
+        <p style="font-size:0.85rem;color:var(--color-text-muted);margin-bottom:16px;">История начислений и оплат</p>\
+        <div style="overflow-x:auto;">\
+          <table class="profile-table">\
+            <thead>\
+              <tr>\
+                <th>Период</th>\
+                <th style="text-align:right;">Содерж.</th>\
+                <th style="text-align:right;">Ремонт</th>\
+                <th style="text-align:right;">Вода</th>\
+                <th style="text-align:right;">Отопл.</th>\
+                <th style="text-align:right;">Эл-во</th>\
+                <th style="text-align:right;">Итого</th>\
+                <th>Статус</th>\
+              </tr>\
+            </thead>\
+            <tbody>' + rows + '</tbody>\
+          </table>\
+        </div>\
+      ';
+    }
+
+    // ========== ПОКАЗАНИЯ ==========
+    function renderMeters(prop) {
+      var el = document.getElementById('profile-tab-meters');
+      var meters = prop.meters || {};
+      var meterHistory = prop.meterHistory || [];
+
+      var hasCw = meters.coldWater && meters.coldWater.number && meters.coldWater.number !== '—';
+      var hasHw = meters.hotWater && meters.hotWater.number && meters.hotWater.number !== '—';
+      var hasEl = meters.electricity && meters.electricity.number;
+
+      var historyRows = meterHistory.slice().reverse().map(function(m) {
+        return '\
+          <tr>\
+            <td>' + m.date + '</td>\
+            <td>' + (m.type === 'coldWater' ? 'ХВС' : m.type === 'hotWater' ? 'ГВС' : 'Эл-во') + '</td>\
+            <td style="text-align:right;">' + fmtNum(m.value) + '</td>\
+          </tr>\
+        ';
+      }).join('');
+
+      el.innerHTML = '\
+        <div class="profile-meters">\
+          <div class="profile-meters__form">\
+            <h4>Передать показания</h4>\
+            <form id="meter-form">\
+              ' + (hasCw ? '<div class="form__group"><label class="form__label">Холодная вода, м³</label><input class="form__input" id="meter-cw" type="number" step="0.01" required></div>' : '') + '\
+              ' + (hasHw ? '<div class="form__group"><label class="form__label">Горячая вода, м³</label><input class="form__input" id="meter-hw" type="number" step="0.01" required></div>' : '') + '\
+              ' + (hasEl ? '<div class="form__group"><label class="form__label">Электричество, кВт·ч</label><input class="form__input" id="meter-el" type="number" step="0.01" required></div>' : '') + '\
+              <button type="submit" class="btn btn--primary form__submit">Отправить</button>\
+            </form>\
+            <div class="form__success" id="meter-success" style="margin-top:16px;">\
+              <i class="fas fa-check-circle"></i>\
+              <h4 style="font-family:var(--font-heading);color:var(--color-primary);margin:8px 0 4px;">Показания отправлены</h4>\
+              <p>Спасибо! Ваши показания приняты.</p>\
+            </div>\
+          </div>\
+          <div style="margin-top:24px;">\
+            <h4 style="font-family:var(--font-heading);font-weight:600;font-size:0.9rem;color:var(--color-primary);margin-bottom:12px;">Расход за последние месяцы</h4>\
+            <div id="meterChart"></div>\
+          </div>\
+          <div>\
+            <h4 style="font-family:var(--font-heading);font-weight:600;font-size:0.9rem;color:var(--color-primary);margin-bottom:16px;">Информация о счётчиках</h4>\
+            <div class="profile-meters__info">\
+              ' + (hasCw ? '<strong>ХВС:</strong> № ' + meters.coldWater.number + ', уст. ' + meters.coldWater.installed + '<br>' : '') + '\
+              ' + (hasHw ? '<strong>ГВС:</strong> № ' + meters.hotWater.number + ', уст. ' + meters.hotWater.installed + '<br>' : '') + '\
+              ' + (hasEl ? '<strong>Эл-во:</strong> № ' + meters.electricity.number + ', уст. ' + meters.electricity.installed + '<br>' : '') + '\
+              <br>Следующая поверка: ' + (hasCw ? 'ХВС — ' + meters.coldWater.nextCheck : '') + (hasHw ? ', ГВС — ' + meters.hotWater.nextCheck : '') + (hasEl ? ', Эл-во — ' + meters.electricity.nextCheck : '') + '\
+            </div>\
+            <h4 style="font-family:var(--font-heading);font-weight:600;font-size:0.9rem;color:var(--color-primary);margin:24px 0 16px;">История показаний</h4>\
+            <div style="overflow-x:auto;">\
+              <table class="profile-table">\
+                <thead>\
+                  <tr><th>Дата</th><th>Счётчик</th><th style="text-align:right;">Значение</th></tr>\
+                </thead>\
+                <tbody>' + historyRows + '</tbody>\
+              </table>\
+            </div>\
+          </div>\
+        </div>\
+      ';
+
+      var mForm = document.getElementById('meter-form');
+      var mSuccess = document.getElementById('meter-success');
       if (mForm && mSuccess) {
-        mForm.addEventListener('submit', (e) => {
+        mForm.addEventListener('submit', function(e) {
           e.preventDefault();
-          const cw = parseFloat(document.getElementById('meter-cw').value);
-          const hw = parseFloat(document.getElementById('meter-hw').value);
-          const el = parseFloat(document.getElementById('meter-el').value);
-          const now = new Date();
-          const dateStr = ('0' + now.getDate()).slice(-2) + '.' + ('0' + (now.getMonth()+1)).slice(-2) + '.' + now.getFullYear();
-          const p = getProfile();
-          p.meterHistory.push({ type: 'coldWater', value: cw, date: dateStr });
-          p.meterHistory.push({ type: 'hotWater', value: hw, date: dateStr });
-          p.meterHistory.push({ type: 'electricity', value: el, date: dateStr });
-          saveProfile(p);
+          var now = new Date();
+          var dateStr = ('0' + now.getDate()).slice(-2) + '.' + ('0' + (now.getMonth()+1)).slice(-2) + '.' + now.getFullYear();
+          if (document.getElementById('meter-cw')) {
+            prop.meterHistory.push({ type: 'coldWater', value: parseFloat(document.getElementById('meter-cw').value), date: dateStr });
+          }
+          if (document.getElementById('meter-hw')) {
+            prop.meterHistory.push({ type: 'hotWater', value: parseFloat(document.getElementById('meter-hw').value), date: dateStr });
+          }
+          if (document.getElementById('meter-el')) {
+            prop.meterHistory.push({ type: 'electricity', value: parseFloat(document.getElementById('meter-el').value), date: dateStr });
+          }
+          saveActivePropertyData(prop);
           mForm.style.display = 'none';
           mSuccess.classList.add('active');
         });
       }
-      // Draw meter consumption chart
-      renderMeterChart(profile);
+      renderMeterChart(prop);
     }
 
-    function renderMeterChart(profile) {
+    function renderMeterChart(prop) {
+      // same as before
       var chartEl = document.getElementById('meterChart');
       if (!chartEl) return;
-      var history = profile.meterHistory || [];
-      // Group by date
+      var history = prop.meterHistory || [];
       var groups = {};
       for (var i = 0; i < history.length; i++) {
         var h = history[i];
@@ -483,7 +760,6 @@
         for (var d = 0; d < dates.length; d++) {
           var val = groups[dates[d]][types[t2]] || 0;
           var pct = maxVal > 0 ? Math.max(4, (val / maxVal) * 100) : 4;
-          var shortDate = dates[d].split('.').slice(1).join('.');
           html += '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;"><div style="width:100%;background:' + colors[t2] + ';border-radius:2px 2px 0 0;height:' + pct + 'px;min-height:4px;transition:height 0.3s;" title="' + val + '"></div><span style="font-size:0.6rem;color:var(--color-text-muted);">' + dates[d] + '</span></div>';
         }
         html += '</div></div>';
@@ -492,194 +768,406 @@
       chartEl.innerHTML = html;
     }
 
-    function renderRequests(profile) {
-      const el = document.getElementById('profile-tab-requests');
-      const { requests } = profile;
-
-      const statusMap = {
+    // ========== ЗАЯВКИ ==========
+    function renderRequests(prop) {
+      var el = document.getElementById('profile-tab-requests');
+      var requests = prop.requests || [];
+      var statusMap = {
         'in-progress': { cls: 'profile-status--in-progress', label: 'В работе' },
         'done': { cls: 'profile-status--done', label: 'Исполнено' },
         'pending': { cls: 'profile-status--pending', label: 'Принято' },
-        'rejected': { cls: 'profile-status--rejected', label: 'Отклонено' }
+        'rejected': { cls: 'profile-status--rejected', label: 'Отклонено' },
+        'cancelled': { cls: 'profile-status--rejected', label: 'Отменена' }
       };
-
-      const cards = requests.slice().reverse().map(r => {
-        const s = statusMap[r.status] || statusMap['pending'];
-        return `
-          <div class="profile-request">
-            <div class="profile-request__header">
-              <span class="profile-request__title">${r.category}: ${r.desc}</span>
-              <span class="profile-request__date">${r.date}</span>
-            </div>
-            <div class="profile-request__meta">
-              <span class="profile-status ${s.cls}">${s.label}</span>
-              ${r.comment ? ' &mdash; ' + r.comment : ''}
-            </div>
-          </div>
-        `;
+      var cards = requests.slice().reverse().map(function(r) {
+        var s = statusMap[r.status] || statusMap['pending'];
+        var canCancel = (r.status === 'pending' || r.status === 'in-progress');
+        var canRate = (r.status === 'done' && !r.rating);
+        return '\
+          <div class="profile-request">\
+            <div class="profile-request__header">\
+              <span class="profile-request__title">' + r.category + ': ' + r.desc + '</span>\
+              <span class="profile-request__date">' + r.date + '</span>\
+            </div>\
+            <div class="profile-request__meta">\
+              <span class="profile-status ' + s.cls + '">' + s.label + '</span>\
+              ' + (r.comment ? ' &mdash; ' + r.comment : '') + '\
+            </div>\
+            ' + (r.photo ? '<div style="margin-top:8px;"><img src="' + r.photo + '" style="max-width:100px;max-height:80px;border-radius:4px;cursor:pointer;" onclick="window.open(this.src)"></div>' : '') + '\
+            ' + (canCancel ? '<button class="btn btn--outline" style="margin-top:8px;font-size:0.75rem;padding:4px 10px;" onclick="cancelRequest(\'' + r.id + '\')"><i class="fas fa-times"></i> Отменить</button>' : '') + '\
+            ' + (canRate ? '<div class="rating-stars" style="margin-top:8px;" data-rid="' + r.id + '"><span style="font-size:0.75rem;color:var(--color-text-muted);margin-right:6px;">Оцените:</span>' + '★★★★★'.split('').map(function(_,i) { return '<span class="star" data-val="' + (i+1) + '" style="cursor:pointer;font-size:1.2rem;color:#ddd;" onclick="rateRequest(\'' + r.id + '\',' + (i+1) + ',this)">★</span>'; }).join('') + '</div>' : '') + '\
+            ' + (r.rating ? '<div style="margin-top:6px;font-size:0.82rem;color:var(--color-accent);">Ваша оценка: ' + '★'.repeat(r.rating) + '☆'.repeat(5-r.rating) + '</div>' : '') + '\
+          </div>\
+        ';
       }).join('');
-
-      el.innerHTML = `
-        <button class="btn btn--primary" onclick="showNewRequestForm()" style="margin-bottom:24px;">
-          <i class="fas fa-plus"></i> Подать заявку
-        </button>
-        <div class="profile-requests">
-          ${cards || '<p style="color:var(--color-text-muted);">У вас нет активных заявок</p>'}
-        </div>
-      `;
+      el.innerHTML = '\
+        <button class="btn btn--primary" onclick="showNewRequestForm()" style="margin-bottom:24px;">\
+          <i class="fas fa-plus"></i> Подать заявку\
+        </button>\
+        <div class="profile-requests">\
+          ' + (cards || '<p style="color:var(--color-text-muted);">У вас нет активных заявок</p>') + '\
+        </div>\
+      ';
     }
 
     function showNewRequestForm() {
-      const html = `
-        <form id="new-request-form">
-          <div class="form__group">
-            <label class="form__label">Категория</label>
-            <select class="form__select" id="req-cat" required>
-              <option value="">Выберите категорию</option>
-              <option value="Сантехника">Сантехника</option>
-              <option value="Электрика">Электрика</option>
-              <option value="Кровля">Кровля</option>
-              <option value="Мусор">Мусор</option>
-              <option value="Другое">Другое</option>
-            </select>
-          </div>
-          <div class="form__group">
-            <label class="form__label">Описание проблемы</label>
-            <textarea class="form__textarea" id="req-desc" required placeholder="Опишите проблему подробно..."></textarea>
-          </div>
-          <button type="submit" class="btn btn--primary form__submit">Отправить заявку</button>
-        </form>
-        <div class="form__success" id="req-success">
-          <i class="fas fa-check-circle"></i>
-          <h3 style="font-family:var(--font-heading);color:var(--color-primary);margin:12px 0 4px;">Заявка принята</h3>
-          <p>Спасибо! Ваша заявка зарегистрирована. Мы свяжемся с вами.</p>
-        </div>
-      `;
-      const overlay = openModal(html, 'Новая заявка');
-      const form = overlay.querySelector('#new-request-form');
-      const success = overlay.querySelector('#req-success');
-      form.addEventListener('submit', (e) => {
+      var overlay = openModal('\
+        <form id="new-request-form">\
+          <div class="form__group">\
+            <label class="form__label">Категория</label>\
+            <select class="form__select" id="req-cat" required>\
+              <option value="">Выберите категорию</option>\
+              <option value="Сантехника">Сантехника</option>\
+              <option value="Электрика">Электрика</option>\
+              <option value="Кровля">Кровля</option>\
+              <option value="Мусор">Мусор</option>\
+              <option value="Другое">Другое</option>\
+            </select>\
+          </div>\
+          <div class="form__group">\
+            <label class="form__label">Описание проблемы</label>\
+            <textarea class="form__textarea" id="req-desc" required placeholder="Опишите проблему подробно..."></textarea>\
+          </div>\
+          <div class="form__group">\
+            <label class="form__label">Прикрепить фото</label>\
+            <input class="form__input" id="req-photo" type="file" accept="image/*">\
+          </div>\
+          <button type="submit" class="btn btn--primary form__submit">Отправить заявку</button>\
+        </form>\
+        <div class="form__success" id="req-success">\
+          <i class="fas fa-check-circle"></i>\
+          <h3 style="font-family:var(--font-heading);color:var(--color-primary);margin:12px 0 4px;">Заявка принята</h3>\
+          <p>Спасибо! Ваша заявка зарегистрирована. Мы свяжемся с вами.</p>\
+        </div>\
+      ', 'Новая заявка');
+      var form = overlay.querySelector('#new-request-form');
+      var success = overlay.querySelector('#req-success');
+      form.addEventListener('submit', function(e) {
         e.preventDefault();
-        const cat = overlay.querySelector('#req-cat').value;
-        const desc = overlay.querySelector('#req-desc').value;
-        const now = new Date();
-        const dateStr = ('0' + now.getDate()).slice(-2) + '.' + ('0' + (now.getMonth()+1)).slice(-2) + '.' + now.getFullYear();
-        const p = getProfile();
-        p.requests.push({
-          id: Date.now(),
+        var cat = overlay.querySelector('#req-cat').value;
+        var desc = overlay.querySelector('#req-desc').value;
+        var photoInput = overlay.querySelector('#req-photo');
+        var now = new Date();
+        var dateStr = ('0' + now.getDate()).slice(-2) + '.' + ('0' + (now.getMonth()+1)).slice(-2) + '.' + now.getFullYear();
+        var p = getProfile();
+        if (!p) return;
+        var prop = getActiveProperty(p);
+        if (!prop) return;
+        if (!prop.requests) prop.requests = [];
+        var reqObj = {
+          id: Date.now().toString(),
           category: cat,
           desc: desc,
-          status: 'in-progress',
+          status: 'pending',
           date: dateStr,
           comment: 'Заявка принята в обработку'
-        });
-        saveProfile(p);
+        };
+        if (photoInput && photoInput.files && photoInput.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function(ev) {
+            reqObj.photo = ev.target.result;
+            prop.requests.push(reqObj);
+            saveActivePropertyData(prop);
+            addNotification(p.login, 'Заявка №' + reqObj.id + ' (' + cat + ') принята в обработку.', 'info', 'profile.html');
+            sendDataToDispatcher({ subject: 'Заявка ЖКУ — ' + cat, name: p.name, address: prop.address, text: desc, category: cat, photo: 'прикреплён' });
+          };
+          reader.readAsDataURL(photoInput.files[0]);
+        } else {
+          prop.requests.push(reqObj);
+          saveActivePropertyData(prop);
+          addNotification(p.login, 'Заявка №' + reqObj.id + ' (' + cat + ') принята в обработку.', 'info', 'profile.html');
+          sendDataToDispatcher({ subject: 'Заявка ЖКУ — ' + cat, name: p.name, address: prop.address, text: desc, category: cat });
+        }
+
         form.style.display = 'none';
         success.classList.add('active');
-        setTimeout(() => { overlay.remove(); renderRequests(p); }, 1500);
+        setTimeout(function() { overlay.remove(); renderRequests(prop); }, 1500);
       });
     }
 
-    function renderApartment(profile) {
-      const el = document.getElementById('profile-tab-apartment');
-      const { apartment, building } = profile;
-
-      el.innerHTML = `
-        <h4 style="font-family:var(--font-heading);font-weight:600;font-size:0.9rem;color:var(--color-primary);margin-bottom:20px;">Данные о квартире</h4>
-        <div class="profile-info-grid">
-          <div class="profile-info-item">
-            <div class="profile-info-item__label">Лицевой счёт</div>
-            <div class="profile-info-item__value">${apartment.account}</div>
-          </div>
-          <div class="profile-info-item">
-            <div class="profile-info-item__label">Общая площадь</div>
-            <div class="profile-info-item__value">${apartment.area} м²</div>
-          </div>
-          <div class="profile-info-item">
-            <div class="profile-info-item__label">Количество комнат</div>
-            <div class="profile-info-item__value">${apartment.rooms}</div>
-          </div>
-          <div class="profile-info-item">
-            <div class="profile-info-item__label">Зарегистрировано</div>
-            <div class="profile-info-item__value">${apartment.registered} чел.</div>
-          </div>
-        </div>
-
-        <h4 style="font-family:var(--font-heading);font-weight:600;font-size:0.9rem;color:var(--color-primary);margin:32px 0 20px;">Информация о доме</h4>
-        <div class="profile-info-grid">
-          <div class="profile-info-item">
-            <div class="profile-info-item__label">Год постройки</div>
-            <div class="profile-info-item__value">${building.year}</div>
-          </div>
-          <div class="profile-info-item">
-            <div class="profile-info-item__label">Этажность</div>
-            <div class="profile-info-item__value">${building.floors}</div>
-          </div>
-          <div class="profile-info-item">
-            <div class="profile-info-item__label">Квартир</div>
-            <div class="profile-info-item__value">${building.apartments}</div>
-          </div>
-          <div class="profile-info-item">
-            <div class="profile-info-item__label">Старший по дому</div>
-            <div class="profile-info-item__value">${building.senior}</div>
-          </div>
-          <div class="profile-info-item">
-            <div class="profile-info-item__label">Капремонт</div>
-            <div class="profile-info-item__value">${building.nextCapitalRepair} г.</div>
-          </div>
-        </div>
-      `;
+    function cancelRequest(id) {
+      if (!confirm('Отменить заявку?')) return;
+      var p = getProfile();
+      if (!p) return;
+      var prop = getActiveProperty(p);
+      if (!prop) return;
+      var reqs = prop.requests || [];
+      for (var i = 0; i < reqs.length; i++) {
+        if (reqs[i].id == id) {
+          reqs[i].status = 'cancelled';
+          reqs[i].comment = 'Заявка отменена жителем';
+          break;
+        }
+      }
+      saveActivePropertyData(prop);
+      addNotification(p.login, 'Заявка №' + id + ' отменена.', 'info', 'profile.html');
+      renderRequests(prop);
     }
 
-    function renderSettings(profile) {
-      const el = document.getElementById('profile-tab-settings');
-      const { user } = profile;
+    function rateRequest(id, val) {
+      var p = getProfile();
+      if (!p) return;
+      var prop = getActiveProperty(p);
+      if (!prop) return;
+      var reqs = prop.requests || [];
+      for (var i = 0; i < reqs.length; i++) {
+        if (reqs[i].id == id) {
+          reqs[i].rating = val;
+          break;
+        }
+      }
+      saveActivePropertyData(prop);
+      addNotification(p.login, 'Спасибо за оценку!', 'info', 'profile.html');
+      renderRequests(prop);
+    }
 
-      el.innerHTML = `
-        <div class="profile-settings">
-          <h4 style="font-family:var(--font-heading);font-weight:600;font-size:0.9rem;color:var(--color-primary);margin-bottom:20px;">Профиль</h4>
-          <form id="settings-form">
-            <div class="form__group">
-              <label class="form__label">ФИО</label>
-              <input class="form__input" id="set-name" type="text" value="${user.name}">
-            </div>
-            <div class="form__group">
-              <label class="form__label">Телефон</label>
-              <input class="form__input" id="set-phone" type="tel" value="${user.phone}">
-            </div>
-            <div class="form__group">
-              <label class="form__label">Email</label>
-              <input class="form__input" id="set-email" type="email" value="${user.email}">
-            </div>
-            <div class="form__group">
-              <label class="form__label">Адрес</label>
-              <input class="form__input" id="set-address" type="text" value="${user.address}">
-            </div>
-            <button type="submit" class="btn btn--primary form__submit">Сохранить</button>
-          </form>
+    // ========== ОТКЛЮЧЕНИЯ ПО РАЙОНУ ==========
+    function renderOutages(prop) {
+      var el = document.getElementById('profile-tab-outages');
+      loadData().then(function(data) {
+        var outages = data.outages || EMBEDDED_DATA.outages || [];
+        var districtName = getDistrictName(prop.districtId);
+        // Find matching outages — by district name or by address
+        var addrParts = (prop.address || '').toLowerCase();
+        var filtered = outages.filter(function(o) {
+          var dMatch = districtName && o.district && o.district.toLowerCase().includes(districtName.toLowerCase().replace('жкс №','').replace(' района','').trim());
+          var aMatch = addrParts && o.addresses && o.addresses.toLowerCase().split(',').some(function(a) { return addrParts.includes(a.trim().slice(0,10)); });
+          return dMatch || aMatch;
+        });
+        // If no match, show all for reference
+        var display = filtered.length > 0 ? filtered : outages;
+        var rows = display.map(function(o) {
+          return '\
+            <tr>\
+              <td>' + o.date + '</td>\
+              <td>' + o.time + '</td>\
+              <td><span class="profile-status profile-status--' + (o.type === 'электричество' ? 'in-progress' : 'pending') + '">' + o.type + '</span></td>\
+              <td>' + o.district + '</td>\
+              <td>' + o.addresses + '</td>\
+            </tr>\
+          ';
+        }).join('');
+        el.innerHTML = '\
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:16px;">\
+            <p style="font-size:0.85rem;color:var(--color-text-muted);margin:0;">' + (filtered.length > 0 ? 'Отключения, относящиеся к вашему району' : 'Все плановые отключения') + '</p>\
+            <span style="font-size:0.78rem;color:var(--color-text-muted);">Район: ' + (districtName || '—') + '</span>\
+          </div>\
+          <div style="overflow-x:auto;">\
+            <table class="profile-table">\
+              <thead><tr><th>Дата</th><th>Время</th><th>Тип</th><th>Участок</th><th>Адреса</th></tr></thead>\
+              <tbody>' + rows + '</tbody>\
+            </table>\
+          </div>\
+        ';
+      });
+    }
 
-          <div class="form__success" id="settings-success" style="margin-top:16px;">
-            <i class="fas fa-check-circle"></i>
-            <h4 style="font-family:var(--font-heading);color:var(--color-primary);margin:8px 0 4px;">Данные сохранены</h4>
-          </div>
+    // ========== СОБЫТИЯ ==========
+    function renderCalendar(prop) {
+      var el = document.getElementById('profile-tab-calendar');
+      loadData().then(function(data) {
+        var events = data.events || EMBEDDED_DATA.events || [];
+        var districtName = getDistrictName(prop.districtId);
+        var filtered = events.filter(function(e) {
+          return e.district === 'Все' || (districtName && e.district && e.district.toLowerCase() === districtName.toLowerCase().replace('жкс №','').replace(' района','').trim());
+        });
+        var display = filtered.length > 0 ? filtered : events;
+        var cards = display.map(function(e) {
+          return '\
+            <div class="profile-request" style="margin-bottom:12px;">\
+              <div class="profile-request__header">\
+                <span class="profile-request__title">' + e.title + '</span>\
+                <span class="profile-request__date">' + e.date + ' ' + (e.time || '') + '</span>\
+              </div>\
+              <div style="font-size:0.82rem;color:var(--color-text-secondary);margin-top:4px;">' + (e.description || '') + '</div>\
+              <div style="font-size:0.78rem;color:var(--color-text-muted);margin-top:4px;">' + (e.location ? '<i class="fas fa-map-marker-alt"></i> ' + e.location : '') + '</div>\
+            </div>\
+          ';
+        }).join('');
+        el.innerHTML = '\
+          <p style="font-size:0.85rem;color:var(--color-text-muted);margin-bottom:16px;">Предстоящие события' + (filtered.length > 0 ? ' по вашему району' : '') + '</p>\
+          ' + (cards || '<p style="color:var(--color-text-muted);">Нет предстоящих событий</p>') + '\
+        ';
+      });
+    }
 
-          <button class="btn btn--outline profile-logout-btn" onclick="logout(); window.location.href='index.html';"><i class="fas fa-sign-out-alt"></i> Выйти из кабинета</button>
-        </div>
-      `;
+    // ========== ДОКУМЕНТЫ ПО ДОМУ ==========
+    function renderDocs(prop) {
+      var el = document.getElementById('profile-tab-docs');
+      var building = prop.building || {};
+      var districtName = getDistrictName(prop.districtId);
+      el.innerHTML = '\
+        <h4 style="font-family:var(--font-heading);font-weight:600;font-size:0.9rem;color:var(--color-primary);margin-bottom:20px;">Документы по дому</h4>\
+        <div class="profile-info-grid">\
+          <div class="profile-info-item" style="cursor:pointer;" onclick="window.open(\'documents/dogovor_upravleniya.pdf\', \'_blank\')">\
+            <div class="profile-info-item__label"><i class="fas fa-file-pdf" style="color:#e74c3c;"></i> Договор управления</div>\
+            <div class="profile-info-item__value" style="font-size:0.78rem;">Типовой договор (PDF, 245 КБ)</div>\
+          </div>\
+          <div class="profile-info-item" style="cursor:pointer;" onclick="window.open(\'documents/akt_vypolnennyh_rabot.pdf\', \'_blank\')">\
+            <div class="profile-info-item__label"><i class="fas fa-file-pdf" style="color:#e74c3c;"></i> Акты выполненных работ</div>\
+            <div class="profile-info-item__value" style="font-size:0.78rem;">' + (building.year || '2026') + ' г. (PDF, 180 КБ)</div>\
+          </div>\
+          <div class="profile-info-item" style="cursor:pointer;" onclick="window.open(\'documents/tarify_2026.pdf\', \'_blank\')">\
+            <div class="profile-info-item__label"><i class="fas fa-file-pdf" style="color:#e74c3c;"></i> Тарифы на услуги</div>\
+            <div class="profile-info-item__value" style="font-size:0.78rem;">2026 г. (PDF, 120 КБ)</div>\
+          </div>\
+        </div>\
+        <h4 style="font-family:var(--font-heading);font-weight:600;font-size:0.9rem;color:var(--color-primary);margin:32px 0 16px;">История обращений</h4>\
+        <div id="support-history-list"></div>\
+      ';
+      renderSupportHistory();
+    }
 
-      const sForm = document.getElementById('settings-form');
-      const sSuccess = document.getElementById('settings-success');
-      if (sForm) {
-        sForm.addEventListener('submit', (e) => {
+    function renderSupportHistory() {
+      var el = document.getElementById('support-history-list');
+      if (!el) return;
+      var logKey = 'zhks_dispatcher_log';
+      var log = [];
+      try { log = JSON.parse(localStorage.getItem(logKey) || '[]'); } catch(e) {}
+      var profile = getProfile();
+      var myLog = log.filter(function(l) { return l.name && profile && l.name === profile.name; });
+      if (myLog.length === 0) {
+        el.innerHTML = '<p style="font-size:0.82rem;color:var(--color-text-muted);">История обращений пуста</p>';
+        return;
+      }
+      var html = myLog.slice().reverse().map(function(l) {
+        return '<div class="profile-request" style="margin-bottom:8px;"><div class="profile-request__header"><span class="profile-request__title">' + (l.subject || 'Обращение') + '</span><span class="profile-request__date">' + (l.date || '') + '</span></div><div style="font-size:0.82rem;color:var(--color-text-secondary);">' + (l.text || '') + '</div></div>';
+      }).join('');
+      el.innerHTML = html;
+    }
+
+    // ========== ЧАТ С ДИСПЕТЧЕРОМ ==========
+    function renderSupport(prop, profile) {
+      var el = document.getElementById('profile-tab-support');
+      el.innerHTML = '\
+        <div style="max-width:500px;">\
+          <h4 style="font-family:var(--font-heading);font-weight:600;font-size:0.9rem;color:var(--color-primary);margin-bottom:16px;">Связь с диспетчерской</h4>\
+          <div style="background:#f8f9fa;border-radius:var(--radius);padding:16px;margin-bottom:20px;">\
+            <p style="font-size:0.85rem;margin-bottom:12px;"><i class="fas fa-phone-alt" style="color:var(--color-accent);"></i> Телефон: <strong>+380-222-31-27</strong> (круглосуточно)</p>\
+            <p style="font-size:0.85rem;margin-bottom:12px;"><i class="fas fa-telegram" style="color:#0088cc;"></i> Telegram: <strong><a href="https://t.me/zgrebenki_gks" target="_blank" style="color:var(--color-accent);">@zgrebenki_gks</a></strong></p>\
+            <p style="font-size:0.82rem;color:var(--color-text-muted);"><i class="fas fa-envelope"></i> Email: <a href="mailto:info@zhabg.ru" style="color:var(--color-accent);">info@zhabg.ru</a></p>\
+          </div>\
+          <h4 style="font-family:var(--font-heading);font-weight:600;font-size:0.9rem;color:var(--color-primary);margin-bottom:12px;">Быстрый вопрос</h4>\
+          <form id="quick-chat-form">\
+            <div class="form__group">\
+              <textarea class="form__textarea" id="chat-msg" required placeholder="Напишите ваш вопрос..." rows="3"></textarea>\
+            </div>\
+            <button type="submit" class="btn btn--primary form__submit"><i class="fas fa-paper-plane"></i> Отправить</button>\
+          </form>\
+          <div class="form__success" id="chat-success" style="margin-top:16px;">\
+            <i class="fas fa-check-circle"></i>\
+            <h4 style="font-family:var(--font-heading);color:var(--color-primary);margin:8px 0 4px;">Сообщение отправлено</h4>\
+            <p>Диспетчер ответит вам в ближайшее время.</p>\
+          </div>\
+        </div>\
+      ';
+      var chatForm = document.getElementById('quick-chat-form');
+      var chatSuccess = document.getElementById('chat-success');
+      if (chatForm) {
+        chatForm.addEventListener('submit', function(e) {
           e.preventDefault();
-          const p = getProfile();
-          p.user.name = document.getElementById('set-name').value;
-          p.user.phone = document.getElementById('set-phone').value;
-          p.user.email = document.getElementById('set-email').value;
-          p.user.address = document.getElementById('set-address').value;
-          saveProfile(p);
+          var msg = document.getElementById('chat-msg').value;
+          sendDataToDispatcher({ subject: 'Быстрый вопрос из кабинета', name: profile.name, address: prop.address, text: msg });
+          addNotification(profile.login, 'Ваш вопрос отправлен диспетчеру.', 'info', 'profile.html');
+          chatForm.style.display = 'none';
+          chatSuccess.classList.add('active');
+        });
+      }
+    }
+
+    // ========== ДАННЫЕ ОБ ОБЪЕКТЕ ==========
+    function renderApartment(prop) {
+      var el = document.getElementById('profile-tab-apartment');
+      var apartment = prop.apartment || {};
+      var building = prop.building || {};
+
+      el.innerHTML = '\
+        <h4 style="font-family:var(--font-heading);font-weight:600;font-size:0.9rem;color:var(--color-primary);margin-bottom:20px;">Данные об объекте — ' + prop.nickname + '</h4>\
+        <div class="profile-info-grid">\
+          <div class="profile-info-item">\
+            <div class="profile-info-item__label">Адрес</div>\
+            <div class="profile-info-item__value">' + (prop.address || '—') + '</div>\
+          </div>\
+          <div class="profile-info-item">\
+            <div class="profile-info-item__label">Лицевой счёт</div>\
+            <div class="profile-info-item__value">' + (apartment.account || '—') + '</div>\
+          </div>\
+          <div class="profile-info-item">\
+            <div class="profile-info-item__label">Общая площадь</div>\
+            <div class="profile-info-item__value">' + (apartment.area ? apartment.area + ' м²' : '—') + '</div>\
+          </div>\
+          <div class="profile-info-item">\
+            <div class="profile-info-item__label">Количество комнат</div>\
+            <div class="profile-info-item__value">' + (apartment.rooms || '—') + '</div>\
+          </div>\
+          <div class="profile-info-item">\
+            <div class="profile-info-item__label">Зарегистрировано</div>\
+            <div class="profile-info-item__value">' + (typeof apartment.registered === 'number' ? apartment.registered + ' чел.' : '—') + '</div>\
+          </div>\
+        </div>\
+        <h4 style="font-family:var(--font-heading);font-weight:600;font-size:0.9rem;color:var(--color-primary);margin:32px 0 20px;">Информация о доме</h4>\
+        <div class="profile-info-grid">\
+          <div class="profile-info-item">\
+            <div class="profile-info-item__label">Год постройки</div>\
+            <div class="profile-info-item__value">' + (building.year || '—') + '</div>\
+          </div>\
+          <div class="profile-info-item">\
+            <div class="profile-info-item__label">Этажность</div>\
+            <div class="profile-info-item__value">' + (building.floors || '—') + '</div>\
+          </div>\
+          <div class="profile-info-item">\
+            <div class="profile-info-item__label">Квартир</div>\
+            <div class="profile-info-item__value">' + (building.apartments || '—') + '</div>\
+          </div>\
+          <div class="profile-info-item">\
+            <div class="profile-info-item__label">Старший по дому</div>\
+            <div class="profile-info-item__value">' + (building.senior || '—') + '</div>\
+          </div>\
+          <div class="profile-info-item">\
+            <div class="profile-info-item__label">Капремонт</div>\
+            <div class="profile-info-item__value">' + (building.nextCapitalRepair || '—') + '</div>\
+          </div>\
+        </div>\
+      ';
+    }
+
+    // ========== НАСТРОЙКИ ==========
+    function renderSettings(profile, prop) {
+      var el = document.getElementById('profile-tab-settings');
+      el.innerHTML = '\
+        <div class="profile-settings">\
+          <h4 style="font-family:var(--font-heading);font-weight:600;font-size:0.9rem;color:var(--color-primary);margin-bottom:20px;">Профиль</h4>\
+          <form id="settings-form">\
+            <div class="form__group">\
+              <label class="form__label">ФИО</label>\
+              <input class="form__input" id="set-name" type="text" value="' + (profile.name || '') + '">\
+            </div>\
+            <div class="form__group">\
+              <label class="form__label">Адрес</label>\
+              <input class="form__input" id="set-address" type="text" value="' + (prop.address || '') + '">\
+            </div>\
+            <button type="submit" class="btn btn--primary form__submit">Сохранить</button>\
+          </form>\
+          <div class="form__success" id="settings-success" style="margin-top:16px;">\
+            <i class="fas fa-check-circle"></i>\
+            <h4 style="font-family:var(--font-heading);color:var(--color-primary);margin:8px 0 4px;">Данные сохранены</h4>\
+          </div>\
+          <button class="btn btn--outline profile-logout-btn" onclick="logout(); window.location.href=\'index.html\';"><i class="fas fa-sign-out-alt"></i> Выйти из кабинета</button>\
+        </div>\
+      ';
+      var sForm = document.getElementById('settings-form');
+      var sSuccess = document.getElementById('settings-success');
+      if (sForm) {
+        sForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          var newName = document.getElementById('set-name').value;
+          var newAddr = document.getElementById('set-address').value;
+          var p = getProfile();
+          if (p) { p.name = newName; saveProfile(p); }
+          prop.address = newAddr;
+          saveActivePropertyData(prop);
           sSuccess.classList.add('active');
-          setTimeout(() => sSuccess.classList.remove('active'), 2000);
+          setTimeout(function() { sSuccess.classList.remove('active'); }, 2000);
         });
       }
     }
