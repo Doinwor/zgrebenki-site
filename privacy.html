@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Политика конфиденциальности — ЖКС Загребенки</title>
+  <meta name="description" content="Политика конфиденциальности и обработки персональных данных ЖКС Загребенки.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .policy h2 {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--color-primary);
+      margin: 32px 0 12px;
+    }
+    .policy p {
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+    .policy ul {
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
+      line-height: 1.7;
+      padding-left: 24px;
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container header__inner">
+      <a href="index.html" class="header__logo">
+        <div class="header__logo-icon">ЖКС</div>
+        <div class="header__logo-text">
+          <span class="header__logo-title">ЖКС Загребенки</span>
+          <span class="header__logo-subtitle">Жилищно-коммунальная служба</span>
+        </div>
+      </a>
+      <nav class="header__nav">
+        <a href="about.html" class="header__nav-link">О нас</a>
+        <a href="news.html" class="header__nav-link">Новости</a>
+        <a href="districts.html" class="header__nav-link">Участки</a>
+        <a href="services.html" class="header__nav-link">Услуги</a>
+        <a href="outages.html" class="header__nav-link">Отключения</a>
+        <div class="header__nav-dropdown">
+          <button class="header__nav-dropdown-toggle">Ещё <i class="fas fa-chevron-down"></i></button>
+          <div class="header__nav-dropdown-menu">
+            <a href="documents.html" class="header__nav-link">Документы</a>
+            <a href="repairs.html" class="header__nav-link">Ремонты</a>
+            <a href="gallery.html" class="header__nav-link">Галерея</a>
+            <a href="faq.html" class="header__nav-link">Вопросы-ответы</a>
+            <a href="vacancies.html" class="header__nav-link">Вакансии</a>
+            <a href="feedback.html" class="header__nav-link">Обратная связь</a>
+            <a href="house-registry.html" class="header__nav-link">Реестр домов</a>
+            <a href="contacts.html" class="header__nav-link">Контакты</a>
+          </div>
+        </div>
+      </nav>
+      <div class="header__right">
+        <div class="header__emergency">
+          <i class="fas fa-phone-alt header__emergency-icon"></i>
+          <div>
+            <div class="header__emergency-label">Аварийная служба</div>
+            <div class="header__emergency-phone" id="emergency-phone">+380-222-31-27</div>
+          </div>
+        </div>
+        <button class="btn btn--danger" onclick="showRepairForm()">
+          <i class="fas fa-exclamation-triangle"></i> <span class="btn__text">Аварийная заявка</span>
+        </button>
+        <button class="header__burger" id="burger-toggle" aria-label="Меню">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-header">
+    <div class="container">
+      <h1 class="page-header__title">Политика конфиденциальности</h1>
+      <p class="page-header__subtitle">Обработка и защита персональных данных</p>
+    </div>
+  </div>
+
+  <section class="page-section">
+    <div class="container policy">
+      <h2>1. Общие положения</h2>
+      <p>Настоящая политика обработки персональных данных составлена в соответствии с требованиями Федерального закона от 27.07.2006 № 152-ФЗ «О персональных данных» и определяет порядок обработки персональных данных и меры по обеспечению безопасности персональных данных, предпринимаемые ЖКС Загребенки (далее — Оператор).</p>
+      <p>Оператор ставит своей важнейшей целью и условием осуществления своей деятельности соблюдение прав и свобод человека и гражданина при обработке его персональных данных, в том числе защиты прав на неприкосновенность частной жизни, личную и семейную тайну.</p>
+
+      <h2>2. Состав персональных данных</h2>
+      <p>Оператор может обрабатывать следующие персональные данные пользователей:</p>
+      <ul>
+        <li>Фамилия, имя, отчество;</li>
+        <li>Номер контактного телефона;</li>
+        <li>Адрес электронной почты;</li>
+        <li>Адрес места жительства;</li>
+        <li>Номер лицевого счёта;</li>
+        <li>Показания приборов учёта.</li>
+      </ul>
+
+      <h2>3. Цели обработки персональных данных</h2>
+      <p>Персональные данные обрабатываются в следующих целях:</p>
+      <ul>
+        <li>Приём и обработка заявок на ремонт;</li>
+        <li>Приём показаний приборов учёта;</li>
+        <li>Консультирование по вопросам ЖКХ;</li>
+        <li>Направление информации о плановых работах и отключениях.</li>
+      </ul>
+
+      <h2>4. Сроки обработки и хранения</h2>
+      <p>Персональные данные обрабатываются и хранятся до момента достижения цели их сбора либо до момента отзыва согласия субъектом персональных данных.</p>
+
+      <h2>5. Защита персональных данных</h2>
+      <p>Оператор принимает необходимые организационные и технические меры для защиты персональных данных от неправомерного доступа, уничтожения, изменения, блокирования, копирования, распространения, а также от иных неправомерных действий третьих лиц.</p>
+
+      <h2>6. Контакты</h2>
+      <p>По всем вопросам, связанным с обработкой персональных данных, вы можете обратиться в ЖКС Загребенки по телефону или электронной почте, указанным на сайте.</p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div>&copy; <span id="footer-year">2026</span> ЖКС Загребенки. Все права защищены.</div>
+      <div class="footer__links">
+        <a href="privacy.html">Политика конфиденциальности</a>
+        <a href="contacts.html">Контакты</a>
+        <a href="contacts.html#requisites">Реквизиты</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="common.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const data = await loadData();
+        const em = document.getElementById('emergency-phone');
+        if (em) em.textContent = data.emergencyPhone;
+      } catch (e) {}
+    });
+  </script>
+</body>
+</html>

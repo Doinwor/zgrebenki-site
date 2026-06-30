@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ФПИ Банк* — Оплата</title>
+<link rel="icon" type="image/png" href="fpi-pay.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #ffffff;
+    --bg-card: #f8f7fc;
+    --text: #1a1a2e;
+    --text-secondary: #6b6a7a;
+    --text-muted: #9a9aaa;
+    --border: #e2e0ee;
+    --border-light: #eeedf4;
+    --accent: #7c3aed;
+    --accent-hover: #6d28d9;
+    --accent-light: #f3effc;
+    --success: #10b981;
+    --success-bg: #ecfdf5;
+    --radius: 16px;
+    --font-heading: 'Unbounded', sans-serif;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 32px; width: 100%; }
+
+  .logo {
+    text-align: center;
+    padding: 32px 0 8px;
+  }
+  .logo img { height: 42px; width: auto; }
+  .logo .brand-name {
+    font-family: var(--font-heading);
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  .divider {
+    text-align: center;
+    font-size: 0.55rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+    margin: 8px 0 32px;
+    opacity: 0.6;
+  }
+
+  /* ===== DESKTOP SIDE-BY-SIDE ===== */
+  .desktop-view { display: none; padding: 0; }
+  .desktop-view.show { display: block; }
+  .desktop-view .qr-layout {
+    display: flex;
+    align-items: center;
+    gap: 48px;
+    max-width: 640px;
+    margin: 0 auto;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 40px 48px;
+    justify-content: center;
+  }
+  .desktop-view .qr-left {
+    flex-shrink: 0;
+  }
+  .desktop-view .qr-left .qr-canvas {
+    border-radius: 12px;
+    overflow: hidden;
+    width: 220px;
+    height: 220px;
+  }
+  .desktop-view .qr-right {
+    flex: 1;
+    min-width: 0;
+  }
+  .desktop-view .qr-right .label {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .desktop-view .qr-right .amount {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+  .desktop-view .qr-right .purpose {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+  }
+  .desktop-view .qr-right .hint {
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-light);
+  }
+
+  /* ===== MOBILE VIEW ===== */
+  .mobile-view { display: none; max-width: 420px; margin: 0 auto; }
+  .mobile-view.show { display: block; }
+
+  .pay-header {
+    text-align: center;
+    padding: 12px 0 24px;
+  }
+  .pay-header .merchant {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .pay-header .amount {
+    font-family: var(--font-heading);
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+  .pay-header .purpose {
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+  }
+
+  .pay-methods {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .pay-methods button {
+    flex: 1;
+    padding: 14px 16px;
+    text-align: center;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text-secondary);
+    font-family: var(--font-heading);
+    font-size: 0.62rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  .pay-methods button .pm-icon { display: block; font-size: 1.3rem; margin-bottom: 6px; }
+  .pay-methods button:hover { border-color: var(--accent); color: var(--text); }
+  .pay-methods button.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-light);
+  }
+
+  .pay-box {
+    padding: 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .pay-box .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .form-group input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 0.9rem;
+    font-family: var(--font-body);
+    outline: none;
+    transition: border 0.2s;
+  }
+  .form-group input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
+  .form-group input::placeholder { color: var(--text-muted); }
+
+  .btn {
+    padding: 14px 32px;
+    border-radius: 14px;
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s;
+    width: 100%;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    letter-spacing: 0.3px;
+  }
+  .btn--primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn--primary:hover { background: var(--accent-hover); transform: translateY(-2px); }
+  .btn--outline {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+  }
+  .btn--outline:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ===== SUCCESS ===== */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 32px 20px;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  .success-screen.show { display: block; }
+  .success-screen .icon { font-size: 3rem; margin-bottom: 12px; color: var(--success); }
+  .success-screen .title {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--success);
+  }
+  .success-screen .desc { color: var(--text-secondary); font-size: 0.82rem; margin-bottom: 24px; }
+  .success-screen .details {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 24px;
+    text-align: left;
+  }
+  .success-screen .details .row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 0.8rem;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .success-screen .details .row:last-child { border-bottom: none; }
+  .success-screen .details .row .label { color: var(--text-muted); }
+  .success-screen .details .row .value { font-weight: 600; }
+
+  .hint-text { color: var(--text-muted); font-size: 0.65rem; margin-top: 6px; }
+
+  /* ===== TOAST ===== */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 14px 24px;
+    border-radius: 12px;
+    background: var(--text);
+    color: #fff;
+    font-size: 0.82rem;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  }
+  .toast.show { opacity: 1; pointer-events: auto; }
+
+  .footer {
+    text-align: center;
+    padding: 48px 24px 32px;
+    color: var(--text-muted);
+    font-size: 0.68rem;
+    max-width: 420px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  .footer i {
+    display: block;
+    font-size: 0.55rem;
+    margin-top: 6px;
+    opacity: 0.5;
+  }
+
+  @media (max-width: 768px) {
+    body { justify-content: flex-start; padding-top: 16px; }
+    .container { padding: 16px; }
+    .logo { padding: 20px 0 6px; }
+    .logo img { height: 36px; }
+    .pay-header .amount { font-size: 2.2rem; }
+    .pay-methods { gap: 8px; }
+    .pay-methods button { padding: 12px; font-size: 0.58rem; }
+    .pay-box { padding: 18px; border-radius: 14px; }
+    .pay-box .row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="logo">
+    <img src="fpi-pay.png" alt="ФПИ" onerror="this.style.display='none'">
+    <div class="brand-name">Фуфелшмертц Пакость Инкорпорейтед</div>
+  </div>
+
+  <div class="divider">— платёжный шлюз —</div>
+
+  <!-- ===== DESKTOP QR (left) + INFO (right) ===== -->
+  <div class="desktop-view" id="desktopView">
+    <div class="qr-layout">
+      <div class="qr-left">
+        <div id="qrCanvas" class="qr-canvas"></div>
+      </div>
+      <div class="qr-right">
+        <div class="label">К оплате</div>
+        <div class="amount" id="desktopAmount">—</div>
+        <div class="purpose" id="desktopPurpose">—</div>
+        <div class="hint"><i class="fas fa-qrcode"></i> Отсканируйте камерой телефона</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MOBILE PAYMENT ===== -->
+  <div class="mobile-view" id="mobileView">
+    <div class="pay-header">
+      <div class="merchant">ФПИ Банк* — Платежи</div>
+      <div class="amount" id="mobileAmount">—</div>
+      <div class="purpose" id="mobilePurpose">—</div>
+    </div>
+
+    <div class="pay-methods">
+      <button class="active" onclick="selectMethod(this,'sbp')"><span class="pm-icon"><i class="fas fa-mobile-alt"></i></span>СБП</button>
+      <button onclick="selectMethod(this,'card')"><span class="pm-icon"><i class="fas fa-credit-card"></i></span>Карта</button>
+    </div>
+
+    <div class="pay-box" id="sbpBox">
+      <div class="form-group">
+        <label>Телефон</label>
+        <input type="text" id="sbpPhone" placeholder="+7 (999) 000-00-00" maxlength="18">
+      </div>
+      <div class="form-group" id="codeGroup" style="display:none">
+        <label>Код из SMS</label>
+        <input type="text" id="sbpCode" placeholder="0000" maxlength="4">
+        <div class="hint-text"><i class="fas fa-info-circle"></i> Подсказка: код будет 0000</div>
+      </div>
+      <button class="btn btn--primary" onclick="handleSbp()" id="sbpBtn">Оплатить по СБП</button>
+    </div>
+
+    <div class="pay-box" id="cardBox" style="display:none">
+      <div class="form-group">
+        <label>Номер карты</label>
+        <input type="text" id="cardNumber" placeholder="0000 0000 0000 0000" maxlength="19">
+      </div>
+      <div class="row">
+        <div class="form-group">
+          <label>Срок</label>
+          <input type="text" id="cardExpiry" placeholder="ММ/ГГ" maxlength="5">
+        </div>
+        <div class="form-group">
+          <label>CVV</label>
+          <input type="text" id="cardCvv" placeholder="***" maxlength="4">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Владелец</label>
+        <input type="text" id="cardName" placeholder="DOOFENSHMIRTZ H.">
+      </div>
+      <button class="btn btn--primary" onclick="handleCard()">Оплатить</button>
+    </div>
+  </div>
+
+  <!-- ===== SUCCESS ===== -->
+  <div class="success-screen" id="successScreen">
+    <div class="icon"><i class="fas fa-check-circle"></i></div>
+    <div class="title">Платёж выполнен!</div>
+    <div class="desc">Деньги ушли в неизвестном направлении. Но мы уверены — всё хорошо.</div>
+    <div class="details" id="psDetails"></div>
+  </div>
+
+  <div class="footer">
+    ФПИ Банк* — шуточный сервис. Все операции демонстрационные.
+    <i>«Ваши финансы — наши пакости»</i>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+<script>
+var _qrLogo = new Image();
+_qrLogo.src = 'fpi-pay.png';
+
+function drawQr(elId, text) {
+  var el = document.getElementById(elId); el.innerHTML = '';
+  var qr = qrcode(0, 'M');
+  qr.addData(text); qr.make();
+  var n = qr.getModuleCount(), s = 220, pad = 18;
+  var cs = (s - pad*2) / n, dpr = window.devicePixelRatio||1;
+  var cv = document.createElement('canvas');
+  cv.width = s*dpr; cv.height = s*dpr;
+  cv.style.width = s+'px'; cv.style.height = s+'px';
+  el.appendChild(cv);
+  var ctx = cv.getContext('2d');
+  ctx.scale(dpr,dpr);
+  ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,s,s);
+  var r2 = cs * 0.42;
+  ctx.fillStyle = '#1a1a2e';
+  for(var i=0;i<n;i++) for(var j=0;j<n;j++) if(qr.isDark(i,j)){
+    ctx.beginPath();
+    ctx.arc(pad+(j+0.5)*cs, pad+(i+0.5)*cs, r2, 0, 2*Math.PI);
+    ctx.fill();
+  }
+  var lr = Math.round(s*0.09), cx = s/2, cy = s/2;
+  ctx.fillStyle = '#ffffff';
+  ctx.beginPath();
+  ctx.arc(cx, cy, lr+3, 0, 2*Math.PI);
+  ctx.fill();
+  if (_qrLogo.complete && _qrLogo.naturalWidth > 0) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, lr, 0, 2*Math.PI);
+    ctx.clip();
+    var ls = lr * 1.8;
+    ctx.drawImage(_qrLogo, cx-ls/2, cy-ls/2, ls, ls);
+    ctx.restore();
+  } else {
+    ctx.fillStyle = '#7c3aed';
+    ctx.beginPath();
+    ctx.arc(cx, cy, lr, 0, 2*Math.PI);
+    ctx.fill();
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold '+Math.round(lr*0.55)+'px Unbounded, sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('ФПИ', cx, cy+1);
+  }
+}
+
+function init() {
+  var p = new URLSearchParams(window.location.search);
+  var a = p.get('amount'), u = p.get('purpose'), id = p.get('id');
+  if (!a || !id) {
+    document.body.innerHTML = '<div class="container" style="text-align:center;padding:80px 24px"><div style="font-size:3rem;margin-bottom:16px;color:var(--text-muted)"><i class="fas fa-skull"></i></div><h2 style="font-family:var(--font-heading);font-weight:700;margin-bottom:8px;font-size:1.1rem">Ссылка недействительна</h2><p style="color:var(--text-secondary);font-size:0.85rem">Для оплаты нужна ссылка с параметрами</p></div>';
+    return;
+  }
+  var fa = parseInt(a).toLocaleString()+' ZD';
+  document.getElementById('desktopAmount').textContent = fa;
+  document.getElementById('desktopPurpose').textContent = u || 'Без назначения';
+  document.getElementById('mobileAmount').textContent = fa;
+  document.getElementById('mobilePurpose').textContent = u || 'Без назначения';
+
+  var link = 'https://pay.fpifpi.ru/?amount=' + encodeURIComponent(a) + '&purpose=' + encodeURIComponent(u||'') + '&id=' + id;
+
+  if (window.innerWidth >= 768) {
+    document.getElementById('desktopView').classList.add('show');
+    drawQr('qrCanvas', link);
+  } else {
+    document.getElementById('mobileView').classList.add('show');
+  }
+}
+
+function selectMethod(btn,m){
+  document.querySelectorAll('.pay-methods button').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  document.getElementById('sbpBox').style.display=m==='sbp'?'block':'none';
+  document.getElementById('cardBox').style.display=m==='card'?'block':'none';
+}
+
+function handleSbp(){
+  var phone=document.getElementById('sbpPhone').value.trim();
+  var cg=document.getElementById('codeGroup'),ci=document.getElementById('sbpCode').value.trim();
+  if(cg.style.display==='none'){
+    if(!phone||phone.replace(/\D/g,'').length<10){showToast('Введите номер телефона',1);return;}
+    document.getElementById('sbpCode').value='0000';
+    cg.style.display='block';
+    document.getElementById('sbpBtn').textContent='Подтвердить';
+    showToast('Код отправлен: 0000');
+    return;
+  }
+  if(ci!=='0000'){showToast('Неверный код. Попробуйте 0000',1);return;}
+  finishPay('СБП');
+}
+
+function handleCard(){
+  var n=document.getElementById('cardNumber').value.trim();
+  var e=document.getElementById('cardExpiry').value.trim();
+  var c=document.getElementById('cardCvv').value.trim();
+  var nm=document.getElementById('cardName').value.trim();
+  if(!n||!e||!c||!nm){showToast('Заполните все поля',1);return;}
+  if(n.replace(/\s/g,'').length<13){showToast('Неверный номер карты',1);return;}
+  finishPay('Карта '+n.replace(/\s/g,'').slice(-4));
+}
+
+function finishPay(label){
+  var p=new URLSearchParams(window.location.search);
+  var amt=p.get('amount'),pur=p.get('purpose');
+  document.getElementById('desktopView').classList.remove('show');
+  document.getElementById('mobileView').classList.remove('show');
+  document.getElementById('successScreen').classList.add('show');
+  document.getElementById('psDetails').innerHTML=
+    '<div class="row"><span class="label">Сумма</span><span class="value">'+parseInt(amt).toLocaleString()+' ZD</span></div>'+
+    '<div class="row"><span class="label">Назначение</span><span class="value">'+(pur||'Без назначения')+'</span></div>'+
+    '<div class="row"><span class="label">Способ</span><span class="value">'+label+'</span></div>'+
+    '<div class="row"><span class="label">Дата</span><span class="value">'+new Date().toLocaleString('ru-RU')+'</span></div>';
+  showToast('Оплата прошла успешно');
+}
+
+function showToast(msg,err){
+  var t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast show';
+  setTimeout(function(){t.classList.remove('show');},3000);
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  var cn=document.getElementById('cardNumber');
+  if(cn)cn.addEventListener('input',function(){this.value=this.value.replace(/\D/g,'').replace(/(.{4})/g,'$1 ').trim().substring(0,19);});
+  var ce=document.getElementById('cardExpiry');
+  if(ce)ce.addEventListener('input',function(){this.value=this.value.replace(/\D/g,'').replace(/(.{2})/,'$1/').substring(0,5);});
+  var cc=document.getElementById('cardCvv');
+  if(cc)cc.addEventListener('input',function(){this.value=this.value.replace(/\D/g,'').substring(0,4);});
+  var sp=document.getElementById('sbpPhone');
+  if(sp)sp.addEventListener('input',function(){
+    var v=this.value.replace(/\D/g,'').substring(0,11),r='+7';
+    if(v.length>1)r+=' ('+v.substring(1,4);
+    if(v.length>4)r+=') '+v.substring(4,7);
+    if(v.length>7)r+='-'+v.substring(7,9);
+    if(v.length>9)r+='-'+v.substring(9,11);
+    this.value=r;
+  });
+  init();
+});
+</script>
+</body>
+</html>

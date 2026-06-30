@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>О нас — ЖКС Загребенки</title>
+  <meta name="description" content="Информация о Жилищно-коммунальной службе города Загребенки. Руководство, лицензии, история.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container header__inner">
+      <a href="index.html" class="header__logo">
+        <div class="header__logo-icon">ЖКС</div>
+        <div class="header__logo-text">
+          <span class="header__logo-title">ЖКС Загребенки</span>
+          <span class="header__logo-subtitle">Жилищно-коммунальная служба</span>
+        </div>
+      </a>
+      <nav class="header__nav">
+        <a href="about.html" class="header__nav-link header__nav-link--active">О нас</a>
+        <a href="news.html" class="header__nav-link">Новости</a>
+        <a href="districts.html" class="header__nav-link">Участки</a>
+        <a href="services.html" class="header__nav-link">Услуги</a>
+        <a href="outages.html" class="header__nav-link">Отключения</a>
+        <div class="header__nav-dropdown">
+          <button class="header__nav-dropdown-toggle">Ещё <i class="fas fa-chevron-down"></i></button>
+          <div class="header__nav-dropdown-menu">
+            <a href="documents.html" class="header__nav-link">Документы</a>
+            <a href="repairs.html" class="header__nav-link">Ремонты</a>
+            <a href="gallery.html" class="header__nav-link">Галерея</a>
+            <a href="faq.html" class="header__nav-link">Вопросы-ответы</a>
+            <a href="vacancies.html" class="header__nav-link">Вакансии</a>
+            <a href="feedback.html" class="header__nav-link">Обратная связь</a>
+            <a href="house-registry.html" class="header__nav-link">Реестр домов</a>
+            <a href="contacts.html" class="header__nav-link">Контакты</a>
+          </div>
+        </div>
+      </nav>
+      <div class="header__right">
+        <div class="header__emergency">
+          <i class="fas fa-phone-alt header__emergency-icon"></i>
+          <div>
+            <div class="header__emergency-label">Аварийная служба</div>
+            <div class="header__emergency-phone" id="emergency-phone">+380-222-31-27</div>
+          </div>
+        </div>
+        <button class="btn btn--danger" onclick="showRepairForm()">
+          <i class="fas fa-exclamation-triangle"></i> <span class="btn__text">Аварийная заявка</span>
+        </button>
+        <button class="header__burger" id="burger-toggle" aria-label="Меню">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-header">
+    <div class="container">
+      <h1 class="page-header__title">О нас</h1>
+      <p class="page-header__subtitle">Информация о ЖКС Загребенки</p>
+    </div>
+  </div>
+
+  <section class="page-section">
+    <div class="container">
+      <div id="about-history" class="about__history"></div>
+
+      <h2 class="section-title">Руководство</h2>
+      <div class="about__leadership" id="leadership-grid">
+        <div class="loading-placeholder"><i class="fas fa-spinner fa-pulse"></i> Загрузка...</div>
+      </div>
+
+      <h2 class="section-title">Лицензии и разрешения</h2>
+      <div class="about__licenses" id="licenses-list">
+        <div class="loading-placeholder"><i class="fas fa-spinner fa-pulse"></i> Загрузка...</div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div>&copy; <span id="footer-year">2026</span> ЖКС Загребенки. Все права защищены.</div>
+      <div class="footer__links">
+        <a href="privacy.html">Политика конфиденциальности</a>
+        <a href="contacts.html">Контакты</a>
+        <a href="contacts.html#requisites">Реквизиты</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="common.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const data = await loadData();
+        const em = document.getElementById('emergency-phone');
+        if (em) em.textContent = data.emergencyPhone;
+
+        const historyEl = document.getElementById('about-history');
+        if (historyEl && data.about) {
+          historyEl.innerHTML = `
+            <p><strong>${data.about.fullName}</strong></p>
+            <p style="margin-top:16px;">${data.about.history}</p>
+            <p style="margin-top:16px;"><em>Миссия:</em> ${data.about.mission}</p>
+          `;
+        }
+
+        const leadershipGrid = document.getElementById('leadership-grid');
+        if (leadershipGrid && data.leadership) {
+          leadershipGrid.innerHTML = '';
+          for (const person of data.leadership) {
+            const card = document.createElement('div');
+            card.className = 'leadership-card';
+            card.innerHTML = `
+              <div class="leadership-card__name">${person.name}</div>
+              <div class="leadership-card__position">${person.position}</div>
+              <div class="leadership-card__contact">
+                <div><i class="fas fa-phone" style="width:16px;color:var(--color-text-muted);"></i> ${person.phone}</div>
+                <div><i class="fas fa-envelope" style="width:16px;color:var(--color-text-muted);"></i> <a href="mailto:${person.email}">${person.email}</a></div>
+              </div>
+            `;
+            leadershipGrid.appendChild(card);
+          }
+        }
+
+        const licensesList = document.getElementById('licenses-list');
+        if (licensesList && data.licenses) {
+          licensesList.innerHTML = '';
+          for (const lic of data.licenses) {
+            const el = document.createElement('div');
+            el.className = 'license-card';
+            el.innerHTML = `
+              <div class="license-card__number">${lic.type} — № ${lic.number}</div>
+              <div class="license-card__info">Дата выдачи: ${lic.date} | Орган: ${lic.authority}</div>
+            `;
+            licensesList.appendChild(el);
+          }
+        }
+      } catch (e) {
+        document.querySelectorAll('.loading-placeholder').forEach(el => {
+          el.innerHTML = '<div class="error-placeholder"><i class="fas fa-exclamation-triangle"></i> Данные временно недоступны.</div>';
+        });
+      }
+    });
+  </script>
+</body>
+</html>
