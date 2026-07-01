@@ -113,7 +113,7 @@
               </div>
             `;
             el.querySelector('.document-item__link').addEventListener('click', function() {
-              alert('Файл «' + doc.file + '» будет доступен для скачивания после загрузки на сервер.');
+              window.open(doc.file, '_blank');
             });
             docsList.appendChild(el);
           }
