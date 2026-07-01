@@ -1,29 +1,61 @@
 <!DOCTYPE html>
-<html lang="ru"><head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Акт вскрытия сейфа с зарплатой (сейф пуст, но мы надеялись)</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://cdnjs.cloudflare.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
-<style>
-*{{margin:0;padding:0;box-sizing:border-box}}
-body{{font-family:'Inter',sans-serif;background:#f5f5f5;padding:30px 15px;color:#222}}
-.d{{max-width:800px;margin:0 auto;background:#fff;padding:50px 60px;box-shadow:0 4px 20px rgba(0,0,0,0.08);border-radius:12px;position:relative}}
-.w{{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);font-size:6rem;color:rgba(0,0,0,0.03);font-weight:900;pointer-events:none;white-space:nowrap;font-family:'Unbounded',sans-serif}}
-h1{{font-family:'Unbounded',sans-serif;font-size:1.3rem;color:#1A3B5C;text-align:center;border-bottom:3px solid #1A3B5C;padding-bottom:20px;margin-bottom:25px}}
-.c{{line-height:1.9;font-size:0.93rem}}
-.c p{{margin-bottom:12px;text-indent:20px}}
-.s{{margin-top:30px;font-size:0.85rem;color:#555;text-align:right}}
-.f{{font-size:0.6rem;color:#999;margin-top:30px;border-top:1px dashed #ddd;padding-top:14px;text-align:center}}
-@media(max-width:600px){{.d{{padding:25px 18px}}}}
-</style>
-</head><body>
-<div class="d"><div class="w">ЧЕРНОВИК</div><h1>Акт вскрытия сейфа с зарплатой (сейф пуст, но мы надеялись)</h1><div class="c"><p>Комиссия в составе: Захаров Алексей (кассир на общественных началах), Гадалка Евлапия (медиум, приглашённая для связи с духом денег) и сторож дядя Петя (понятой, потому что мимо проходил).</p>
-<p>В присутствии комиссии произведено вскрытие сейфа в кабинете главного бухгалтера. Внутри обнаружены: три скрепки (одна согнутая), календарик за 2019 год, засохший корм для рыбок и записка почерком бухгалтера: «Денег нет, но вы держитесь».</p>
-<p>Гадалка Евлапия провела сеанс связи с духом сейфа. Дух сообщил, что деньги «ушли на повышение» (вероятно, повышение тарифов на отопление).</p>
-<p>Захаров Алексей предложил объявить сейф «памятником нематериального наследия». Предложение принято.</p></div>
-<div class="s">С уважением,<br>Администрация ЖКС Загребенки<br><span style="font-size:0.7rem;color:#aaa">(документ создан в состоянии аффекта)</span></div>
-<div class="f">ЖКС Загребенки, 2026. Юридической силы не имеет. Никого не обязывает. Автор в отпуске.</div></div>
-</body></html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Акт вскрытия сейфа с зарплатой (сейф пуст, но мы надеялись)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
+  <style>
+    * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+    body {{ font-family: 'Inter', sans-serif; background: #f5f5f5; padding: 40px 20px; color: #222; }}
+    .document {{ max-width: 800px; margin: 0 auto; background: #fff; padding: 60px 70px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-radius: 12px; position: relative; }}
+    .watermark {{ position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) rotate(-30deg); font-size: 6rem; color: rgba(0,0,0,0.03); font-weight: 900; pointer-events: none; white-space: nowrap; font-family: 'Unbounded', sans-serif; }}
+    .header {{ text-align: center; border-bottom: 3px solid #1A3B5C; padding-bottom: 30px; margin-bottom: 30px; }}
+    .header h1 {{ font-family: 'Unbounded', sans-serif; font-size: 1.4rem; color: #1A3B5C; margin-bottom: 6px; }}
+    .header .sub {{ font-size: 0.8rem; color: #888; }}
+    .content {{ line-height: 1.9; font-size: 0.95rem; }}
+    .content p {{ margin-bottom: 16px; text-indent: 24px; }}
+    .content h2 {{ font-size: 1.05rem; color: #1A3B5C; margin: 26px 0 12px; border-left: 4px solid #2B7BEE; padding-left: 12px; }}
+    .fine {{ font-size: 0.6rem; color: #999; margin-top: 40px; border-top: 1px dashed #ddd; padding-top: 16px; text-align: center; }}
+    .stamp {{ text-align: right; margin: 30px 0 10px; font-size: 0.85rem; color: #1A3B5C; font-weight: 600; }}
+    .sign {{ margin-top: 40px; display: flex; justify-content: space-between; font-size: 0.85rem; }}
+    .sign div {{ text-align: center; }}
+    .sign .line {{ width: 200px; border-bottom: 1px solid #333; margin-bottom: 4px; }}
+    @media (max-width: 600px) {{ .document {{ padding: 30px 20px; }} }}
+  </style>
+</head>
+<body>
+<div class="document">
+  <div class="watermark">ХОЛОСТОЙ СЕЙФ</div>
+  <div class="header">
+    <h1>Акт вскрытия сейфа с зарплатой (сейф пуст, но мы надеялись)</h1>
+  </div>
+  <div class="content">
+<h2>Состав комиссии</h2>
+<p>Комиссия в составе Захарова Алексея Сергеевича (кассир на общественных началах, он же материально ответственное лицо, он же единственный, у кого был выходной и кого смогли дозваться), Гадалки Евлапии Захаровны (приглашённый медиум для связи с духом утерянных финансов) и сторожа дяди Пети (понятой — проходил мимо, заглянул на чай, был реквизирован).</p>
+<p>Заседание комиссии проходило в кабинете главного бухгалтера, помещение опечатано не было — скотч закончился ещё в 2023 году. Ключ от сейфа хранился там, где и полагается: в верхнем ящике стола без замка, под папкой с надписью «Надо разобрать (2019)».</p>
+<h2>Процедура вскрытия</h2>
+<p>В присутствии членов комиссии произведено торжественное вскрытие сейфа модели «Гранит-М» 2007 года выпуска. Замок открылся со второго поворота ключа и характерного звука, который Евлапия охарактеризовала как «духовный скрежет разочарования».</p>
+<p>Внутри сейфа обнаружены следующие материальные ценности:</p>
+<p style="padding-left:30px;text-indent:0">&mdash; Три скрепки (одна — согнутая, предположительно в форме знака бесконечности, что Евлапия сочла знамением бесконечного отсутствия денег).</p>
+<p style="padding-left:30px;text-indent:0">&mdash; Настенный календарик за 2019 год с отмеченным днём выплаты зарплаты (зачеркнут и исправлен на 2020, затем на 2021, 2022 — календарь закончился).</p>
+<p style="padding-left:30px;text-indent:0">&mdash; Засохший корм для аквариумных рыбок (аквариума в помещении нет и никогда не было).</p>
+<p style="padding-left:30px;text-indent:0">&mdash; Записка почерком главного бухгалтера: «Денег нет, но вы держитесь. Зарплата — в следующем квартале. Каком именно — не уточняется». К записке прилагался рисунок дома и дерева — предположительно, бухгалтер перешёл в детский возраст от стресса.</p>
+<h2>Заключение Гадалки Евлапии</h2>
+<p>Евлапия провела сеанс связи с духом сейфа продолжительностью 40 минут. В ходе сеанса дух сейфа идентифицировал себя как «Грант Михалыч» (от марки «Гранит-М») и сообщил следующее:</p>
+<p style="padding-left:30px;text-indent:0">&mdash; Деньги «ушли на повышение» — предположительно, повышение тарифов на отопление поглотило весь бюджет.</p>
+<p style="padding-left:30px;text-indent:0">&mdash; Часть средств «трансформировалась в нематериальные активы» — то есть в обещания.</p>
+<p style="padding-left:30px;text-indent:0">&mdash; Оставшиеся финансы «мигрировали в астрал, где, возможно, приносят проценты духам».</p>
+<p>На вопрос, вернутся ли деньги, дух ответил уклончиво: «Всему своё время. И своя стоимость. Ваша стоимость — 85 300 ZD».</p>
+<h2>Решение комиссии</h2>
+<p>Захаров Алексей предложил объявить сейф «памятником нематериального наследия ЖКС Загребенки» и впредь не открывать до поступления сигналов из астрала. Предложение принято единогласно. Сейф опечатан воском (найден у сторожа от старой бутылки).</p>
+<p>Ведомость на зарплату не подписана — подпишут, когда Евлапия увидит деньги в шаре. Особое мнение Захарова: «Я так и знал. Можно я пойду домой?» — удовлетворено.</p>
+  </div>
+  <div class="stamp">М.П. &mdash; если печать потеряли, то просто буквы</div>
+  <div class="fine">ЖКС Загребенки, 2026. Юридической силы не имеет, но выглядит убедительно.</div>
+</div>
+</body>
+</html>
